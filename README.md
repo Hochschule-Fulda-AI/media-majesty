@@ -17,11 +17,11 @@ _[Anwer Al-Dhify](https://github.com/AnwerHSFulda)_
 [anwer-ahmed.al-dhify@informatik.hs-fulda.de](mailto:anwer-ahmed.al-dhify@informatik.hs-fulda.de)
 
 - _1491148_
-[Duru Yilmaz](https://github.com/dyilmaz03)
+_[Duru Yilmaz](https://github.com/dyilmaz03)_
 [duru.yilmaz@informatik.hs-fulda.de](mailto:duru.yilmaz@informatik.hs-fulda.de)
 
 - _1458989_
-[Shifali Kalra](https://github.com/shifalikalra)
+_[Shifali Kalra](https://github.com/shifalikalra)_
 [shifali.shifali@informatik.hs-fulda.de](mailto:shifali.shifali@informatik.hs-fulda.de)
 
 - _1457966_
