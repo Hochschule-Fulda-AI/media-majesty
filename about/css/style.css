@@ -26,6 +26,7 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
 }
 
 /* Styling for the h1 (Media Majesty) */
@@ -61,4 +62,11 @@ li a {
 /* Style the link on hover */
 li a:hover {
     text-decoration: underline;
+}
+
+footer {
+    color: gray;
+    font-size: 14px;
+    font-style: italic;
+    padding: 10px;
 }
