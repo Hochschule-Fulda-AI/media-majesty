@@ -1,0 +1,54 @@
+/* Reset some default browser styles */
+body,
+h1,
+h2,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Add some spacing between sections */
+section {
+    margin-top: 20px;
+}
+
+/* Style links */
+a {
+    text-decoration: none;
+    color: #0074d9;
+}
+
+a:hover {
+    text-decoration: underline;
+}
