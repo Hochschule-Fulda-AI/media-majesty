@@ -14,8 +14,14 @@
         <div class="space-x-6">
             <a href="{% url 'core:contact' %}" class="text-sm font-medium hover:text-gray-500">Contact</a>
             <a href="{% url 'core:about' %}" class="text-sm font-medium hover:text-gray-500">About</a>
-            <a href="#" class="text-sm px-6 py-3 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
-            <a href="#" class="text-sm px-6 py-3 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log in</a>
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'core:dashboard' %}" class="text-sm font-medium hover:text-gray-500">Dashboard</a>
+            <a href="{% url 'core:inbox' %}" class="text-sm font-medium hover:text-gray-500">Inbox</a>
+                <a href="{% url 'core:logout' %}" class="text-sm px-6 py-3 font-medium bg-red-500 text-white hover:bg-red-700 rounded-sm">Logout</a>
+            {% else %}
+                <a href="{% url 'core:signup' %}" class="text-sm px-6 py-3 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
+                <a href="{% url 'core:login' %}" class="text-sm px-6 py-3 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log in</a>
+            {% endif %}
         </div>
     </nav>
     <div class="px-40 py-6 min-h-[80vh]">
