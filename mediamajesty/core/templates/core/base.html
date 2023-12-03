@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}{% endblock %} | Media Majesty</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <nav class="px-40 py-10 flex justify-between items-center border-b border-gray-200">
+        <a href="/" class="text-xl font-semibold">Media Majesty</a>
+        <div class="space-x-6">
+            <a href="{% url 'core:contact' %}" class="text-sm font-medium hover:text-gray-500">Contact</a>
+            <a href="{% url 'core:about' %}" class="text-sm font-medium hover:text-gray-500">About</a>
+            <a href="#" class="text-sm px-6 py-3 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
+            <a href="#" class="text-sm px-6 py-3 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log in</a>
+        </div>
+    </nav>
+    <div class="px-40 py-6 min-h-[80vh]">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="px-40 py-10 flex justify-between bg-gray-800">
+        <div class="w-2/3 pr-10 text-gray-500">
+            <disclaimer class="italic">
+                Fulda University of Applied Sciences, <br>
+                Software Engineering Project, Fall 2023, For Demonstration Purposes
+                Only
+            </disclaimer>
+        </div>
+        <div class="w-1/3 flex justify-between">
+            <ul class="space-y-2">
+                <li>
+                    <a href="{% url 'core:about' %}" class="text-gray-500 hover:text-gray-300">About</a>
+                </li>
+                <li>
+                    <a href="{% url 'core:contact' %}" class="text-gray-500 hover:text-gray-300">Contact</a>
+                </li>
+            </ul>
+            <ul class="space-y-2">
+                <li>
+                    <a href="#" class="text-gray-500 hover:text-gray-300">Privacy Policy</a>
+                </li>
+                <li>
+                    <a href="#" class="text-gray-500 hover:text-gray-300">Terms of Service</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+</body>
+
+</html>
