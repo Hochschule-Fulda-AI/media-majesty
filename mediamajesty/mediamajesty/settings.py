@@ -1,4 +1,8 @@
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -69,11 +73,11 @@ WSGI_APPLICATION = "mediamajesty.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "media_majesty",
-        "USER": "zeus",
-        "PASSWORD": "asoiaf 7",
-        "HOST": "localhost",
-        "PORT": "3306",
+        "NAME": str(os.getenv("DATABASE_NAME")),
+        "USER": str(os.getenv("DATABASE_USER")),
+        "PASSWORD": str(os.getenv("DATABASE_PASSWORD")),
+        "HOST": str(os.getenv("DATABASE_HOST")),
+        "PORT": str(os.getenv("DATABASE_PORT")),
     }
 }
 
