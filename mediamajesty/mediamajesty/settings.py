@@ -17,7 +17,7 @@ SECRET_KEY = "django-insecure-ph-%&(rz9%s+ylwtgz5f7(b22jr+^gfi0$*^(x_hg*g9@oyk&x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
@@ -106,11 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -118,6 +115,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR/"static"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
