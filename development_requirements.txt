@@ -1,5 +1,6 @@
 asgiref==3.7.2
 Django==4.2.7
+django-jazzmin==2.6.0
 django-stubs==4.2.6
 django-stubs-ext==4.2.5
 mysqlclient==2.2.0
