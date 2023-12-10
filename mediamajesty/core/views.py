@@ -30,8 +30,5 @@ def signup(request):
         form = SignUpForm()
     return render(request, "core/signup.html", {"form": form})
 
-def dashboard(request):
-    return render(request, "core/dashboard.html")
-
 def inbox(request):
     return render(request, "core/inbox.html")
