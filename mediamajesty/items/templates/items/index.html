@@ -14,9 +14,21 @@
         <p class="text-xl font-light pt-4 pb-4">{{ item.category }}</p>
         <p class="text-xl font-normal text-gray-700">{{ item.description }}</p>
 
+        {% if item.created_by == request.user %}
+        <div class="mt-6 p-6 space-x-8 bg-white rounded-md">
+            <p class="pl-8 text-lg text-gray-700">This is your item!</p>
+            <a href="{% url 'items:edit_item' item.id %}" class="inline-block mt-6 px-6 py-2 text-md font-semibold bg-teal-500 text-white rounded-sm hover:bg-teal-700">
+                Edit
+            </a>
+            <a href="{% url 'items:delete_item' item.id %}" class="inline-block mt-6 px-6 py-2 text-md font-semibold bg-red-500 text-white rounded-sm hover:bg-red-700">
+                Delete
+            </a>
+        </div>
+        {% else %}
         <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm">
             Contact Seller
         </button>
+        {% endif %}
     </div>
 </div>
 
