@@ -7,6 +7,10 @@ from faker import Faker
 from django.contrib.auth.models import User  # Add this import at the beginning of the file
 from django.contrib.auth.decorators import login_required
 
+from django.http import JsonResponse
+from django.views import View
+
+
 
 def items(request):
     search = request.GET.get("search", "")
@@ -31,7 +35,13 @@ def items(request):
         },
     )
 
-
+class SearchSuggestionsView(View):
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get("query", "")
+        suggestions = Item.objects.filter(name__icontains=query).values('id', 'name')
+        suggestions_list = [{'id': suggestion['id'], 'name': suggestion['name']} for suggestion in suggestions]
+        return JsonResponse(suggestions_list, safe=False)
+    
 def index(request, id):
     item = get_object_or_404(Item, id=id)
     related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(
@@ -97,14 +107,12 @@ def delete_item(request, id):
 def generate_dummy_posts(request):
     fake = Faker()
 
-    # Create dummy categories
     category_names = ["Electronics", "Clothing", "Books", "Furniture", "Toys"]
     categories = [Category.objects.create(name=name) for name in category_names]
 
-    # Create dummy items
-    for _ in range(100):  # Generate 10 dummy posts (adjust as needed)
+    for _ in range(100):  
         category = fake.random_element(elements=categories)
-        user = User.objects.first()  # You might want to get a specific user here
+        user = User.objects.first() 
 
         item = Item.objects.create(
             category=category,
@@ -115,9 +123,5 @@ def generate_dummy_posts(request):
             price=fake.random_number(2),
             is_sold=False,
         )
-
-        # Add a thumbnail image if needed
-        # item.thumbnail = 'C:\Users\achra\Pictures\Predator\Planet9_Wallpaper_5000x2813.jpg'
-        # item.save()
 
     return render(request, 'items/index.html', {'message': 'Dummy posts added successfully'})
