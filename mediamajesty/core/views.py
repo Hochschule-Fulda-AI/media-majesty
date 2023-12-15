@@ -1,4 +1,7 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 from django.shortcuts import render, redirect
+
 from items.models import Category, Item
 from .forms import SignUpForm
 
@@ -29,6 +32,11 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, "core/signup.html", {"form": form})
+
+@login_required
+def logout(request):
+    auth_logout(request)
+    return redirect("/")
 
 def inbox(request):
     return render(request, "core/inbox.html")
