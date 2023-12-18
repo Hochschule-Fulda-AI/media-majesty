@@ -18,7 +18,7 @@ class Item(models.Model):
     description = models.TextField(blank=True, null=True)
     media_url = models.URLField(blank=True, null=True)
     price = models.FloatField()
-    thumbnail = models.ImageField(upload_to='item_thumbnails/', blank=True, null=True)
+    thumbnail_url = models.URLField(blank=True, null=True)
     is_sold = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

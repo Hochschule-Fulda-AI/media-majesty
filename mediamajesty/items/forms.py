@@ -8,7 +8,7 @@ INPUT_CLASSES = "w-full py-4 px-2 rounded-sm border"
 class AddNewItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ("category", "name", "description", "media_url", "price", "thumbnail")
+        fields = ("category", "name", "description", "media_url", "price", "thumbnail_url")
         widgets = {
             "category": forms.Select(attrs={"class": INPUT_CLASSES}),
             "name": forms.TextInput(
@@ -27,14 +27,16 @@ class AddNewItemForm(forms.ModelForm):
             "price": forms.NumberInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Price"}
             ),
-            "thumbnail": forms.FileInput(attrs={"class": INPUT_CLASSES}),
+            "thumbnail": forms.TextInput(
+                attrs={"class": INPUT_CLASSES, "placeholder": "Thumbnail URL"}
+            ),
         }
 
 
 class EditItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ("name", "description", "media_url", "price", "thumbnail", "is_sold")
+        fields = ("name", "description", "media_url", "price", "thumbnail_url", "is_sold")
         widgets = {
             "category": forms.Select(attrs={"class": INPUT_CLASSES}),
             "name": forms.TextInput(
@@ -53,5 +55,7 @@ class EditItemForm(forms.ModelForm):
             "price": forms.NumberInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Price"}
             ),
-            "thumbnail": forms.FileInput(attrs={"class": INPUT_CLASSES}),
+            "thumbnail": forms.TextInput(
+                attrs={"class": INPUT_CLASSES, "placeholder": "Thumbnail URL"}
+            ),
         }
