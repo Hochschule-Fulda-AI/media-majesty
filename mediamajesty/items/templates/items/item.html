@@ -25,9 +25,9 @@
             </a>
         </div>
         {% else %}
-        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm">
+        <a href="{% url 'chats:new' item.id %}" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm">
             Contact Seller
-        </button>
+        </a>
         {% endif %}
     </div>
 </div>

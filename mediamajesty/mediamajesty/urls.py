@@ -10,4 +10,5 @@ urlpatterns = [
     path("items/", include("items.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("seed/", include("seed.urls")),
+    path("chats/", include("chats.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
