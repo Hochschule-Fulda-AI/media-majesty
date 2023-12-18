@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
@@ -46,3 +48,9 @@ class SignUpForm(UserCreationForm):
             "class": "w-full p-2 my-2 border border-gray-300 rounded-sm"
             })
     )
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not email.endswith('@informatik.hs-fulda.de'):
+            raise ValidationError('Only users with informatik.hs-fulda.de emails are allowed to register.')
+        return email

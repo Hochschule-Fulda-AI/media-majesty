@@ -3,11 +3,14 @@ Django==4.2.7
 django-jazzmin==2.6.0
 django-stubs==4.2.6
 django-stubs-ext==4.2.5
+Faker==21.0.0
 gunicorn==21.2.0
 mysqlclient==2.2.0
 packaging==23.2
 Pillow==10.1.0
+python-dateutil==2.8.2
 python-dotenv==1.0.0
+six==1.16.0
 sqlparse==0.4.4
 tomli==2.0.1
 types-pytz==2023.3.1.1
