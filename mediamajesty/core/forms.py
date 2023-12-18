@@ -51,6 +51,6 @@ class SignUpForm(UserCreationForm):
     
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if not email.endswith('@informatik.hs-fulda.de'):
-            raise ValidationError('Only users with informatik.hs-fulda.de emails are allowed to register.')
+        if not email.endswith('hs-fulda.de'):
+            raise ValidationError('Only users with hs-fulda.de domain are allowed to register.')
         return email

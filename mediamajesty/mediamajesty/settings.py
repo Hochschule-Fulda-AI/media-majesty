@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "items",
     "dashboard",
     "chats",
+    "seed",
 ]
 
 MIDDLEWARE = [

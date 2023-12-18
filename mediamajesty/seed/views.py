@@ -11,7 +11,7 @@ def users(_):
     created_users = []
     for _ in range(10):
         username = fake.name().lower().replace(" ", "_")
-        email = username + "@hochschule-fulda.de"
+        email = username + "@informatik.hs-fulda.de"
         password = fake.password()
         _, created = User.objects.get_or_create(
             username=username, defaults={"email": email, "password": password}
