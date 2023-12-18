@@ -8,7 +8,6 @@
         <input type="text" name="search" id="searchInput" placeholder="Search" class="py-4 px-6 border w-full rounded-l-md" value="{{ search }}">
     </form>
 
-    <!-- Search suggestions container -->
     <div id="suggestionsContainer" class="w-full mb-4">
         <ul id="suggestionsList" class="list-none p-2 bg-white shadow-md rounded-md"></ul>
     </div>
@@ -48,6 +47,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function() {

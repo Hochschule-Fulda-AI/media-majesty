@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block content %}
+<h1 class="mb-10">Inbox. This is {{request.user}}'s inbox!</h1>
+
+{% if conversations %}
+
+{% for conversation in conversations %}
+    <a href="{% url 'chats:chat' conversation.id %}">
+        <div class="p-4 mb-8 bg-gray-100 rounded-tr-lg rounded-bl-lg">
+            <div class="font-semibold text-blue-700 mb-4"> {{conversation.seller}}: </div>
+            <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Repellendus, ab?
+            </p>
+        </div>
+    </a>
+{% endfor %}
+
+{% else %}
+    <p>No conversations yet!</p>
+{% endif %}
+
+{% endblock %}

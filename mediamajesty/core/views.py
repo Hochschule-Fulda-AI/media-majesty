@@ -37,6 +37,3 @@ def signup(request):
 def logout(request):
     auth_logout(request)
     return redirect("/")
-
-def inbox(request):
-    return render(request, "core/inbox.html")

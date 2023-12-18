@@ -26,6 +26,7 @@ LOGOUT_REDIRECT_URL = "/"
 # Application definition
 
 INSTALLED_APPS = [
+    "channels",
     "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     "core",
     "items",
     "dashboard",
+    "chats",
 ]
 
 MIDDLEWARE = [
@@ -68,6 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "mediamajesty.wsgi.application"
+ASGI_APPLICATION = "mediamajesty.asgi.application"
 
 
 # Database
