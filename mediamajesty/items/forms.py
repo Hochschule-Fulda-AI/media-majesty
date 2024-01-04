@@ -27,7 +27,7 @@ class AddNewItemForm(forms.ModelForm):
             "price": forms.NumberInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Price"}
             ),
-            "thumbnail": forms.TextInput(
+            "thumbnail_url": forms.TextInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Thumbnail URL"}
             ),
         }
@@ -55,7 +55,7 @@ class EditItemForm(forms.ModelForm):
             "price": forms.NumberInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Price"}
             ),
-            "thumbnail": forms.TextInput(
+            "thumbnail_url": forms.TextInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Thumbnail URL"}
             ),
         }

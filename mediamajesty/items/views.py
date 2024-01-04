@@ -61,7 +61,7 @@ def add(request):
             item = form.save(commit=False)
             item.created_by = request.user
             item.save()
-            return redirect("items:index", id=item.id)
+            return redirect("items:item", id=item.id)
     else:
         form = AddNewItemForm()
 
@@ -84,7 +84,7 @@ def edit(request, id):
 
         if form.is_valid():
             form.save()
-            return redirect("items:index", id=id)
+            return redirect("items:item", id=id)
     else:
         form = EditItemForm(instance=item)
 

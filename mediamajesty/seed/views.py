@@ -34,7 +34,8 @@ def items(_):
         name = fake.sentence(nb_words=3)
         description = fake.text()
         price = fake.pyint(min_value=5, max_value=50)
-        thumbnail = fake.image_url(width=1920, height=1080)
+        # random specific image for each item
+        thumbnail = f"https://picsum.photos/seed/{name}/1920/1080"
         _, created = Item.objects.get_or_create(
             name=name,
             defaults={
