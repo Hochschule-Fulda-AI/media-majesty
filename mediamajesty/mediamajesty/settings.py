@@ -26,7 +26,7 @@ LOGOUT_REDIRECT_URL = "/"
 # Application definition
 
 INSTALLED_APPS = [
-    "channels",
+    "daphne",
     "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -73,6 +73,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "mediamajesty.wsgi.application"
 ASGI_APPLICATION = "mediamajesty.asgi.application"
 
+CHANNEL_LAYERS = {
+    "default": {
+        # testing only
+        # migrate to redis in production
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
