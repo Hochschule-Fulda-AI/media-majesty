@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import user_passes_test
 from faker import Faker
 
 from items.models import Category, Item
@@ -7,6 +8,7 @@ from items.models import Category, Item
 fake = Faker()
 
 
+@user_passes_test(lambda u: u.is_staff) # type: ignore
 def users(_):
     created_users = []
     for _ in range(10):
@@ -26,6 +28,25 @@ def users(_):
     return JsonResponse({"users": created_users})
 
 
+@user_passes_test(lambda u: u.is_staff) # type: ignore
+def categories(_):
+    category_names = [
+        "Photographs",
+        "Videos",
+        "Music",
+        "Digital Illustrations",
+        "EBooks",
+        "Websites",
+    ]
+    created_categories = []
+    for name in category_names:
+        _, created = Category.objects.get_or_create(name=name)
+        created_categories.append({"name": name, "created": created})
+
+    return JsonResponse({"categories": created_categories})
+
+
+@user_passes_test(lambda u: u.is_staff) # type: ignore
 def items(_):
     created_items = []
     for _ in range(10):
@@ -58,20 +79,3 @@ def items(_):
             }
         )
     return JsonResponse({"items": created_items})
-
-
-def categories(_):
-    category_names = [
-        "Photographs",
-        "Videos",
-        "Music",
-        "Digital Illustrations",
-        "EBooks",
-        "Websites",
-    ]
-    created_categories = []
-    for name in category_names:
-        _, created = Category.objects.get_or_create(name=name)
-        created_categories.append({"name": name, "created": created})
-
-    return JsonResponse({"categories": created_categories})

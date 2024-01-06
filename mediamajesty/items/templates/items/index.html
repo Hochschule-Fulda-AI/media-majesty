@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mx-auto mt-8">
-    <form action="{% url 'items:index' %}" class="w-full mb-10 flex items-center">
+    <form action="{% url 'items:index' %}" class="w-full mb-10 flex items-center" autocomplete="off">
         <input type="text" name="search" id="searchInput" placeholder="Search" class="py-4 px-6 border w-full rounded-l-md" value="{{ search }}">
     </form>
 

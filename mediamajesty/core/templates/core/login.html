@@ -6,7 +6,7 @@
 <div class="w-1/2 my-6 p-6 mx-auto bg-gray-100 rounded-xl">
     <h1 class="mb-8 text-3xl text-center">Log In</h1>
 
-    <form method="post" class="px-20 text-2xl" action=".">
+    <form method="post" class="px-20 text-2xl" action="." autocomplete="off">
         {% csrf_token %}
 
         {{ form.non_field_errors }}
