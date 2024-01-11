@@ -30,6 +30,13 @@ def index(request):
         items = items.filter(
             Q(name__icontains=search) | Q(description__icontains=search)
         )
+        
+    sort_option = request.GET.get("sort", "")  
+
+    if sort_option == "asc":
+        items = items.order_by('price')
+    elif sort_option == "desc":
+        items = items.order_by('-price')
 
     return render(
         request,

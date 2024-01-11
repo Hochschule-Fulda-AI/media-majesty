@@ -6,6 +6,8 @@
 <div class="container mx-auto mt-8">
     <form action="{% url 'items:index' %}" class="w-full mb-10 flex items-center" autocomplete="off">
         <input type="text" name="search" id="searchInput" placeholder="Search" class="py-4 px-6 border w-full rounded-l-md" value="{{ search }}">
+        <button type="submit" name="sort" value="asc" class="ml-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md">Lowest to Highest price</button>
+        <button type="submit" name="sort" value="desc" class="ml-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md">Highest to Lowest price</button>
     </form>
 
     <div id="suggestionsContainer" class="w-full mb-4">
