@@ -146,3 +146,16 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Welcome to Media Majesty Admin Dashboard!",
     "copyright": "Media Majesty",
 }
+
+
+# Use AzureBlobStorage for storing static files.
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+
+# Azure Storage Account settings
+AZURE_ACCOUNT_NAME = 'mediamajestystorage'
+AZURE_ACCOUNT_KEY = 'sEQH8IaY8dUxmFoKu8LMtIdiJVgSWFJcQuN/8A51iobkUxK1IVJpX+QppnhrUoXB58EtodqeZ7OO+AStMCyxfg=='
+
+# Azure Storage Container settings
+AZURE_CONTAINER = 'media-majesty-container' 
+
+# ... (your existing settings)
