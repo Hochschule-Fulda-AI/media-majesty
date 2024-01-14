@@ -20,7 +20,7 @@ class Item(models.Model):
     created_by = models.ForeignKey(User, related_name="items", on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    media_file = models.FileField(upload_to="uploads/", blank=True, null=True)
+    media_file = models.FileField(upload_to='uploads/', default='')
     price = models.FloatField()
     thumbnail_url = models.URLField(blank=True, null=True)
     is_approved = models.BooleanField(default=False)
