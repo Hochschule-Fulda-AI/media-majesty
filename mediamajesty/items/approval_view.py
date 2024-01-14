@@ -17,7 +17,7 @@ def pending_item(request, id):
 
 
 @user_passes_test(lambda u: u.is_staff)  # type: ignore
-def approve_item(_, id):
+def approve_item(request, id):
     item = get_object_or_404(Item, id=id)
     item.is_approved = True
     item.save()
