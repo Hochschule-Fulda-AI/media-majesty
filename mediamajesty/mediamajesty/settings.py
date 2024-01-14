@@ -146,3 +146,10 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Welcome to Media Majesty Admin Dashboard!",
     "copyright": "Media Majesty",
 }
+
+
+# Use AzureBlobStorage for storing static files.
+DEFAULT_FILE_STORAGE = str(os.getenv("DEFAULT_FILE_STORAGE"))
+AZURE_ACCOUNT_NAME = str(os.getenv("AZURE_ACCOUNT_NAME"))
+AZURE_ACCOUNT_KEY = str(os.getenv("AZURE_ACCOUNT_KEY"))
+AZURE_CONTAINER = str(os.getenv("AZURE_CONTAINER"))
