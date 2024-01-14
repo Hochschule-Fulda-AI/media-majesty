@@ -12,17 +12,24 @@
     <nav class="px-40 py-10 flex justify-between items-center border-b border-gray-200">
         <a href="/" class="text-xl font-semibold">Media Majesty</a>
         <div class="space-x-6">
+
             {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser %}
+            <a href="{% url 'items:pending_items' %}" class="text-sm font-medium hover:text-gray-500">Pending Items</a>
+            <a href="{% url 'seed:categories' %}" class="text-sm font-medium hover:text-gray-500">Seed Categories</a>
+            <a href="{% url 'seed:users' %}" class="text-sm font-medium hover:text-gray-500">Seed Users</a>
+            <a href="{% url 'seed:items' %}" class="text-sm font-medium hover:text-gray-500">Seed Items</a>
+            {% else %}
             <a href="{% url 'items:add' %}" class="text-sm font-medium hover:text-gray-500">Add Item</a>
-            <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
             <a href="{% url 'dashboard:index' %}" class="text-sm font-medium hover:text-gray-500">Dashboard</a>
+            {% endif %}
+            <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
             <a href="{% url 'chats:index' %}" class="text-sm font-medium hover:text-gray-500">Inbox</a>
             <a href="{% url 'core:logout' %}"
                 class="text-sm px-6 py-3 font-medium bg-red-500 text-white hover:bg-red-700 rounded-sm">Logout</a>
             {% else %}
             <a href="{% url 'core:contact' %}" class="text-sm font-medium hover:text-gray-500">Contact</a>
             <a href="{% url 'core:about' %}" class="text-sm font-medium hover:text-gray-500">About</a>
-            <a href="{% url 'items:add' %}" class="text-sm font-medium hover:text-gray-500">Add Item</a>
             <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
             <a href="{% url 'core:signup' %}"
                 class="text-sm px-6 py-3 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
