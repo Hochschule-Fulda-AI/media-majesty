@@ -6,9 +6,16 @@ INPUT_CLASSES = "w-full py-4 px-2 rounded-sm border"
 
 
 class AddNewItemForm(forms.ModelForm):
-    class Meta:
+    class Meta:  # type: ignore
         model = Item
-        fields = ("category", "name", "description", "media_file", "price", "thumbnail_url")
+        fields = (
+            "category",
+            "name",
+            "description",
+            "media_file",
+            "price",
+            "thumbnail_url",
+        )
         widgets = {
             "category": forms.Select(attrs={"class": INPUT_CLASSES}),
             "name": forms.TextInput(
@@ -21,7 +28,7 @@ class AddNewItemForm(forms.ModelForm):
                     "placeholder": "Item description",
                 }
             ),
-            "media_file": forms.FileInput(),
+            "media_file": forms.FileInput(attrs={"class": "mb-4"}),
             "price": forms.NumberInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Price"}
             ),
@@ -32,9 +39,16 @@ class AddNewItemForm(forms.ModelForm):
 
 
 class EditItemForm(forms.ModelForm):
-    class Meta:
+    class Meta:  # type: ignore
         model = Item
-        fields = ("name", "description", "media_file", "price", "thumbnail_url", "is_sold")
+        fields = (
+            "name",
+            "description",
+            "media_file",
+            "price",
+            "thumbnail_url",
+            "is_sold",
+        )
         widgets = {
             "category": forms.Select(attrs={"class": INPUT_CLASSES}),
             "name": forms.TextInput(
@@ -47,7 +61,7 @@ class EditItemForm(forms.ModelForm):
                     "placeholder": "Item description",
                 }
             ),
-            "media_file": forms.FileInput(),
+            "media_file": forms.FileInput(attrs={"class": "mb-4"}),
             "price": forms.NumberInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Price"}
             ),
