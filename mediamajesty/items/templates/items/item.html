@@ -10,9 +10,15 @@
     <div class="col-span-2 p-10 bg-gray-100 rounded-sm">
         <h1 class="text-2xl font-bold mb-2">{{ item.name }}</h1>
         <p class="text-xl font-normal">{{ item.price }}€</p>
-        <p class="text-lg font-light pt-4 pb-4">Sold by {{ item.created_by }}</p>
+        <p class="text-lg font-light pt-4">Sold by {{ item.created_by }}</p>
+
+        {% if item.is_approved == False %}
+        <p class="text-lg font-light text-gray-500 pb-4">Waiting for approval</p>
+        {% endif %}
+
         <p class="text-xl font-light pt-4 pb-4">{{ item.category }}</p>
         <p class="text-xl font-normal text-gray-700">{{ item.description }}</p>
+
 
         {% if item.created_by == request.user %}
         <div class="mt-6 p-6 space-x-8 bg-white rounded-md">

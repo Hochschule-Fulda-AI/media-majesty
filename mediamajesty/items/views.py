@@ -1,27 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
 from django.db.models import Q
 
 from .forms import AddNewItemForm, EditItemForm
 from .models import Category, Item
 
 
-def search_suggestion(request):
-    query = request.GET.get("query", "")
-    suggestions = Item.objects.filter(name__icontains=query).values("id", "name")
-    suggestions_list = [
-        {"id": suggestion["id"], "name": suggestion["name"]}
-        for suggestion in suggestions
-    ]
-    return JsonResponse(suggestions_list, safe=False)
-
-
 def index(request):
     search = request.GET.get("search", "")
     category_id = request.GET.get("category", 0)
     categories = Category.objects.all()
-    items = Item.objects.filter(is_sold=False)
+    items = Item.objects.filter(is_sold=False, is_approved=True)
 
     if category_id:
         items = items.filter(category_id=category_id)
@@ -52,9 +41,9 @@ def index(request):
 
 def item(request, id):
     item = get_object_or_404(Item, id=id)
-    related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(
-        id=id
-    )
+    related_items = Item.objects.filter(
+        category=item.category, is_sold=False, is_approved=True
+    ).exclude(id=id)
     return render(
         request, "items/item.html", {"item": item, "related_items": related_items}
     )
@@ -90,6 +79,7 @@ def edit(request, id):
         form = EditItemForm(request.POST, request.FILES, instance=item)
 
         if form.is_valid():
+            form.instance.is_approved = False
             form.save()
             return redirect("items:item", id=id)
     else:

@@ -8,7 +8,7 @@ from items.models import Category, Item
 fake = Faker()
 
 
-@user_passes_test(lambda u: u.is_staff) # type: ignore
+@user_passes_test(lambda u: u.is_staff)  # type: ignore
 def users(_):
     created_users = []
     for _ in range(10):
@@ -28,7 +28,7 @@ def users(_):
     return JsonResponse({"users": created_users})
 
 
-@user_passes_test(lambda u: u.is_staff) # type: ignore
+@user_passes_test(lambda u: u.is_staff)  # type: ignore
 def categories(_):
     category_names = [
         "Photographs",
@@ -46,11 +46,11 @@ def categories(_):
     return JsonResponse({"categories": created_categories})
 
 
-@user_passes_test(lambda u: u.is_staff) # type: ignore
+@user_passes_test(lambda u: u.is_staff)  # type: ignore
 def items(_):
     created_items = []
     for _ in range(10):
-        user = fake.random_element(User.objects.all())
+        user = fake.random_element(User.objects.all().exclude(is_staff=True))
         category = fake.random_element(Category.objects.all())
         name = fake.sentence(nb_words=3)
         description = fake.text()
