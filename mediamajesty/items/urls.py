@@ -2,6 +2,8 @@
 from django.urls import path
 
 from . import views
+from . import search_view
+from . import approval_view
 
 app_name = "items"
 
@@ -11,5 +13,12 @@ urlpatterns = [
     path("<int:id>/", views.item, name="item"),
     path("<int:id>/edit/", views.edit, name="edit"),
     path("<int:id>/delete/", views.delete, name="delete"),
-    path("api/search_suggestions/", views.search_suggestion, name="search_suggestion"),
+    path("<int:id>/approve/", approval_view.approve_item, name="approve_item"),
+    path("pending/", approval_view.pending_items, name="pending_items"),
+    path("pending/<int:id>/", approval_view.pending_item, name="pending_item"),
+    path(
+        "api/search_suggestions/",
+        search_view.search_suggestion,
+        name="search_suggestion",
+    ),
 ]
