@@ -23,9 +23,6 @@ def download(request, id):
     blob_service_client = BlobServiceClient(account_url=f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net", credential=AZURE_ACCOUNT_KEY)
 
     container_name = AZURE_CONTAINER
-
-    
-    
     
     local_path = os.path.join('Downloads', blob_name.split("/")[-1]) 
     if not os.path.exists('Downloads'):

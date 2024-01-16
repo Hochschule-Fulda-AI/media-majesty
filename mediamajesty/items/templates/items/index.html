@@ -6,8 +6,6 @@
 <div class="container mx-auto mt-8">
     <form action="{% url 'items:index' %}" class="w-full mb-10 flex items-center" autocomplete="off">
         <input type="text" name="search" id="searchInput" placeholder="Search" class="py-4 px-6 border w-full rounded-l-md" value="{{ search }}">
-        <button type="submit" name="sort" value="asc" class="ml-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md">Lowest to Highest price</button>
-        <button type="submit" name="sort" value="desc" class="ml-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md">Highest to Lowest price</button>
     </form>
 
     <div id="suggestionsContainer" class="w-full mb-4">
@@ -24,10 +22,24 @@
                 </li>
                 {% endfor %}
             </ul>
-            <p class="font-semibold mt-4">Clear Filters</p>
-            <ul>
-                <li><a href="{% url 'items:index' %}" class="mt-6 ml-4 py-2 px-6 inline-block bg-yellow-500 hover:bg-yellow-600 rounded-md text-lg text-white font-medium">Clear</a></li>
-            </ul>
+            
+
+            <form action="{% url 'items:index' %}" class="mt-4" autocomplete="off">
+                <div class="mb-2">
+                    <label for="min_price" class="block text-sm font-medium text-gray-600">Min Price</label>
+                    <input type="number" name="min_price" id="min_price" placeholder="Enter Min Price" class="py-2 px-4 border rounded-md" value="{{ request.GET.min_price }}">
+                </div>
+
+                <div class="mb-2">
+                    <label for="max_price" class="block text-sm font-medium text-gray-600">Max Price</label>
+                    <input type="number" name="max_price" id="max_price" placeholder="Enter Max Price" class="py-2 px-4 border rounded-md" value="{{ request.GET.max_price }}">
+                </div>
+
+                <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md">Apply Price</button>
+                <ul>
+                    <li><a href="{% url 'items:index' %}" class="mt-6 ml-4 py-2 px-6 inline-block bg-yellow-500 hover:bg-yellow-600 rounded-md text-lg text-white font-medium">Clear Filters</a></li>
+                </ul>
+            </form>
         </div>
 
         <div class="col-span-3">
@@ -44,12 +56,14 @@
                         </div>
                     </a>
                 </div>
+                
                 {% endfor %}
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
+
 
 {% block scripts %}
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

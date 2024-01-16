@@ -5,10 +5,11 @@ from django.db.models import Q
 from .forms import AddNewItemForm, EditItemForm
 from .models import Category, Item
 
-
 def index(request):
     search = request.GET.get("search", "")
     category_id = request.GET.get("category", 0)
+    min_price = request.GET.get("min_price")
+    max_price = request.GET.get("max_price")
     categories = Category.objects.all()
     items = Item.objects.filter(is_sold=False, is_approved=True)
 
@@ -19,13 +20,13 @@ def index(request):
         items = items.filter(
             Q(name__icontains=search) | Q(description__icontains=search)
         )
-        
-    sort_option = request.GET.get("sort", "")  
 
-    if sort_option == "asc":
-        items = items.order_by('price')
-    elif sort_option == "desc":
-        items = items.order_by('-price')
+    if min_price and max_price:
+        items = items.filter(price__range=(min_price, max_price))
+    elif min_price:
+        items = items.filter(price__gte=min_price)
+    elif max_price:
+        items = items.filter(price__lte=max_price)
 
     return render(
         request,
@@ -37,7 +38,6 @@ def index(request):
             "category_id": int(category_id),
         },
     )
-
 
 def item(request, id):
     item = get_object_or_404(Item, id=id)

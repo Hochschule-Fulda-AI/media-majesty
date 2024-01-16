@@ -2,7 +2,9 @@
 
 {% block title %}{{ item.name }}{% endblock %}
 
+
 {% block content %}
+
 <div class="grid grid-cols-5 gap-6">
     <div class="col-span-3">
         <img src="{{ item.thumbnail_url }}" alt="item thumbnail" class="rounded-sm" />
@@ -31,14 +33,12 @@
             </a>
         </div>
         {% else %}
-        <a href="{% url 'chats:new' item.id %}" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm">
-            Contact Seller
-        </a>
+        <a href="{% url 'chats:new' item.id %}" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm"> Contact Seller</a>
         {% if item.price == 0.0 %}
-            <a href="{% url 'items:download' item.id %}" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm"> Download </a>
+        <a href="{% url 'items:download' item.id %}" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm"> Download </a>
         {% else %}
-            <a href="{% url 'items:download' item.id %}" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm" > purchase </a>
-            {% endif %}
+        <button class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm" id="purchaseBtn">Purchase</button>            
+        {% endif %}
         {% endif %}
     </div>
 </div>
@@ -62,3 +62,23 @@
     </div>
 </div>
 {% endblock %}
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var purchaseBtn = document.getElementById('purchaseBtn');
+    
+        if (purchaseBtn) {
+            purchaseBtn.addEventListener('click', function() {
+                var isConfirmed = confirm("Are you sure you want to buy this item?");
+                
+                if (isConfirmed) {
+                    purchaseBtn.innerText = "Download";
+                    window.location.href = "{% url 'items:download' item.id %}";
+                }
+            });
+        }
+    });
+    </script>
+    
+    
+    {% endblock %}
