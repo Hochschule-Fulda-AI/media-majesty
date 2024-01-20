@@ -14,7 +14,6 @@ class AddNewItemForm(forms.ModelForm):
             "description",
             "media_file",
             "price",
-            "thumbnail_url",
         )
         widgets = {
             "category": forms.Select(attrs={"class": INPUT_CLASSES}),
@@ -32,9 +31,6 @@ class AddNewItemForm(forms.ModelForm):
             "price": forms.NumberInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Price"}
             ),
-            "thumbnail_url": forms.TextInput(
-                attrs={"class": INPUT_CLASSES, "placeholder": "Thumbnail URL"}
-            ),
         }
 
 
@@ -46,7 +42,6 @@ class EditItemForm(forms.ModelForm):
             "description",
             "media_file",
             "price",
-            "thumbnail_url",
             "is_sold",
         )
         widgets = {
@@ -64,8 +59,5 @@ class EditItemForm(forms.ModelForm):
             "media_file": forms.FileInput(attrs={"class": "mb-4"}),
             "price": forms.NumberInput(
                 attrs={"class": INPUT_CLASSES, "placeholder": "Price"}
-            ),
-            "thumbnail_url": forms.TextInput(
-                attrs={"class": INPUT_CLASSES, "placeholder": "Thumbnail URL"}
             ),
         }
