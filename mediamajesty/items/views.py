@@ -6,7 +6,7 @@ from .models import Category, Item, ThumbnailAzureStorage
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
-
+import mimetypes
 
 def index(request):
     search = request.GET.get("search", "")
@@ -101,9 +101,9 @@ def delete(request, id):
     return redirect("dashboard:index")
 
 
-
 def generate_thumbnail_url(item_instance):
-    if item_instance.media_file and item_instance.media_file.name.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')):
+    media_file_type = mimetypes.guess_type(item_instance.media_file.name)[0]
+    if item_instance.media_file and media_file_type.startswith('image'):
         original_image = Image.open(item_instance.media_file)
         thumbnail_size = (300, 300)       # maximum thumbnail size 
         original_image.thumbnail(thumbnail_size)
@@ -111,8 +111,14 @@ def generate_thumbnail_url(item_instance):
             original_image = original_image.convert('RGB')
         thumbnail_io = BytesIO()
         original_image.save(thumbnail_io, format='JPEG')
-        thumbnail_name = f"thumbnails-resized/{item_instance.media_file.name.split('/')[-1]}"
+        thumbnail_name = f"{item_instance.media_file.name.split('/')[-1]}"
         thumbnail_content = thumbnail_io.getvalue()
         thumbnail_storage = ThumbnailAzureStorage()
         thumbnail_storage.save(thumbnail_name, ContentFile(thumbnail_content))
         return thumbnail_storage.url(thumbnail_name)
+    elif media_file_type.startswith('video'):
+        return f"https://mediamajestystorage.blob.core.windows.net/thumbnails-container/thumbnails-default/default-video-thumbnail.png"    
+    elif media_file_type.startswith('audio'):
+        return f"https://mediamajestystorage.blob.core.windows.net/thumbnails-container/thumbnails-default/default-audio-thumbnail.png"   
+    else:
+        return None
