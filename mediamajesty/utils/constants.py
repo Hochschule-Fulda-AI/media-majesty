@@ -13,5 +13,12 @@ ACCEPTED_FILE_EXTENSIONS = [
     "pdf", "doc", "docx", "txt",
 ]
 
+ACCEPTED_FILE_MIME_TYPES = [
+    "image/jpeg", "image/png",
+    "video/mp4", "video/quicktime", "video/x-msvideo",
+    "audio/mpeg", "audio/wav", "audio/ogg", "audio/flac",
+    "application/pdf", "application/msword", "text/plain",
+]
+
 # for items form 
 HTML_ACCEPTED_FILE_EXTENSIONS = ", ".join(list(map(lambda x: f".{x}", ACCEPTED_FILE_EXTENSIONS)))
