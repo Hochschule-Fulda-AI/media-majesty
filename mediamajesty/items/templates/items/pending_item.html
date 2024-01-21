@@ -3,19 +3,19 @@
 {% block title %}Pending - {{ item.name }}{% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-5 gap-6">
-    <div class="col-span-3">
-        <img src="{{ item.thumbnail_url }}" alt="item thumbnail" class="rounded-sm" />
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+    <div class="col-span-1 sm:col-span-3 lg:col-span-3">
+        <img src="{{ item.thumbnail_url }}" alt="item thumbnail" class="w-full h-auto rounded-sm" />
     </div>
-    <div class="col-span-2 p-10 bg-gray-100 rounded-sm">
-        <h1 class="text-2xl font-bold mb-2">{{ item.name }}</h1>
-        <p class="text-xl font-normal">Status: Pending</p>
-        <p class="text-xl font-normal">{{ item.price }}€</p>
-        <p class="text-lg font-light pt-4 pb-4">Sold by {{ item.created_by }}</p>
-        <p class="text-xl font-light pt-4 pb-4">{{ item.category }}</p>
-        <p class="text-xl font-normal text-gray-700">{{ item.description }}</p>
+    <div class="col-span-1 sm:col-span-2 lg:col-span-2 p-4 sm:p-10 bg-gray-100 rounded-sm">
+        <h1 class="text-xl sm:text-2xl font-bold mb-2">{{ item.name }}</h1>
+        <p class="text-md sm:text-lg font-normal">Status: Pending</p>
+        <p class="text-md sm:text-lg font-normal">{{ item.price }}€</p>
+        <p class="text-md sm:text-lg font-light pt-2 sm:pt-4 pb-2 sm:pb-4">Sold by {{ item.created_by }}</p>
+        <p class="text-md sm:text-lg font-normal pt-2 sm:pt-4 pb-2 sm:pb-4">{{ item.category }}</p>
+        <p class="text-md sm:text-lg font-normal text-gray-700 pt-2 sm:pt-4 pb-2 sm:pb-4">{{ item.description }}</p>
         <a href="{% url 'items:approve_item' item.id %}"
-            class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 mr-6 py-2 px-4 rounded-sm">
+            class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-4 sm:mt-6 mr-4 sm:mr-6 py-2 px-4 sm:px-6 rounded-sm">
             Approve Item
         </a>
     </div>
