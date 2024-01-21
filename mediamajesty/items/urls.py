@@ -22,5 +22,5 @@ urlpatterns = [
         search_view.search_suggestion,
         name="search_suggestion",
     ),
-    path("download/<int:id>/", download_view.download, name="download")
+    path("download/<int:id>/", download_view.download, name="download"),
 ]

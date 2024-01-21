@@ -1,10 +1,13 @@
+import os
+import uuid
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from faker import Faker
 
 from items.models import Category, Item
-from utils.constants import CATEGORIES
+from utils.constants import CATEGORIES, SEED_NUM
+from utils.functions import download_image_from_url
 
 fake = Faker()
 
@@ -22,7 +25,7 @@ def categories(_):
 @user_passes_test(lambda u: u.is_staff)  # type: ignore
 def users(_):
     created_users = []
-    for _ in range(10):
+    for _ in range(SEED_NUM):
         username = fake.name().lower().replace(" ", "_")
         email = username + "@informatik.hs-fulda.de"
         password = fake.password()
@@ -44,15 +47,15 @@ def users(_):
 @user_passes_test(lambda u: u.is_staff)  # type: ignore
 def items(_):
     created_items = []
-    for _ in range(10):
-        user = fake.random_element(User.objects.all().exclude(is_staff=True))
+    for _ in range(SEED_NUM):
         category = fake.random_element(Category.objects.all())
+        user = fake.random_element(User.objects.all().exclude(is_staff=True))
         name = fake.sentence(nb_words=3)
         description = fake.text()
         price = fake.pyint(min_value=0, max_value=50)
-        # random specific image for each item
         thumbnail = f"https://picsum.photos/seed/{name}/1920/1080"
-        _, created = Item.objects.get_or_create(
+        media_file = download_image_from_url(thumbnail)
+        item, created = Item.objects.get_or_create(
             name=name,
             defaults={
                 "created_by": user,
@@ -62,9 +65,17 @@ def items(_):
                 "thumbnail_url": thumbnail,
             },
         )
+        with open(media_file.name, "rb") as file:  # type: ignore
+            item.media_file.save(
+                uuid.uuid4().hex + "." + file.name.split(".")[-1],  # type: ignore
+                file,
+                save=True,
+            )
+        media_file.close()  # type: ignore
+        os.remove(media_file.name)  # type: ignore
         created_items.append(
             {
-                "created_by": user.username,
+                # "created_by": user.username,
                 "category": category.name,
                 "name": name,
                 "description": description,

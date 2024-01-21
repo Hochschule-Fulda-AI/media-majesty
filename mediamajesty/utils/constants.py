@@ -1,3 +1,5 @@
+SEED_NUM = 10
+
 CATEGORIES = {
     "Digital Illustrations",
     "Photographs & Videos",
