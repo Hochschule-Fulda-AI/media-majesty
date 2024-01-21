@@ -78,7 +78,7 @@
                 const isConfirmed = confirm("Are you sure you want to buy this item?");
 
                 if (isConfirmed) {
-                    purchaseBtn.innerText = "Download";
+                    purchaseBtn.innerText = "Purchase";
                     window.location.href = "{% url 'items:download' item.id %}";
                 }
             });
