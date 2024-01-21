@@ -3,26 +3,26 @@
 {% block title %}Inbox{% endblock %}
 
 {% block content %}
-<h1 class="mb-10">Inbox. This is {{request.user}}'s inbox!</h1>
+  <h1 class="mb-6 text-2xl md:mb-10">Inbox. This is {{ request.user }}'s inbox!</h1>
 
-{% if conversations %}
+  {% if conversations %}
 
-{% for conversation in conversations %}
-<a href="{% url 'chats:chat' conversation.id %}">
-    <div class="p-4 mb-8 bg-gray-100 rounded-tr-lg rounded-bl-lg">
-        {% if conversation.seller == request.user %}
-        <div class="font-semibold text-blue-700 mb-1"> {{conversation.buyer}}:</div>
-        {% else %}
-        <div class="font-semibold text-blue-700 mb-1"> {{conversation.seller}}:</div>
-        {% endif %}
-        <div class="font-regular text-gray-400 text-sm mb-4"> {{conversation.item}}</div>
-        <p>{{ conversation.last_message }}</p>
-    </div>
-</a>
-{% endfor %}
+    {% for conversation in conversations %}
+      <a href="{% url 'chats:chat' conversation.id %}">
+        <div class="p-4 mb-4 md:mb-8 bg-gray-100 rounded-lg">
+          {% if conversation.seller == request.user %}
+            <div class="font-semibold text-blue-700 mb-1"> {{ conversation.buyer }}:</div>
+          {% else %}
+            <div class="font-semibold text-blue-700 mb-1"> {{ conversation.seller }}:</div>
+          {% endif %}
+          <div class="font-regular text-gray-400 text-sm mb-2 md:mb-4"> {{ conversation.item }}</div>
+          <p class="text-sm">{{ conversation.last_message }}</p>
+        </div>
+      </a>
+    {% endfor %}
 
-{% else %}
-<p>No conversations yet!</p>
-{% endif %}
+  {% else %}
+    <p>No conversations yet!</p>
+  {% endif %}
 
 {% endblock %}
