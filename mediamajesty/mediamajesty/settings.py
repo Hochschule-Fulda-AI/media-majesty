@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "dashboard",
     "chats",
     "seed",
+    "contact_app.apps.ContactAppConfig"
 ]
 
 MIDDLEWARE = [
