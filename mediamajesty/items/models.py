@@ -26,7 +26,7 @@ class Item(models.Model):
     is_approved = models.BooleanField(default=False)
     is_sold = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    is_reported = models.BooleanField(default=False)
     class Meta:  # type: ignore
         ordering = ("name",)
 

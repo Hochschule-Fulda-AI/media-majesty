@@ -21,4 +21,6 @@ urlpatterns = [
         search_view.search_suggestion,
         name="search_suggestion",
     ),
+    path("<int:id>/report/", approval_view.report_item, name="report_item"),
+
 ]
