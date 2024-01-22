@@ -9,8 +9,6 @@
     <form method="post" class="px-20 text-2xl" action=".">
         {% csrf_token %}
 
-        {{ form.non_field_errors }}
-
         <div class="mb-4">
             <label for="username" class="inline-block mb-2">Username</label><br>
             {{ form.username }}
