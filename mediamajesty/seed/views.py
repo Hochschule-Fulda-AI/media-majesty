@@ -75,7 +75,7 @@ def items(_):
         os.remove(media_file.name)  # type: ignore
         created_items.append(
             {
-                # "created_by": user.username,
+                "created_by": user.username,
                 "category": category.name,
                 "name": name,
                 "description": description,
