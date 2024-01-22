@@ -1,7 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
 from django.shortcuts import render, redirect
-
+from django.shortcuts import render
+from django.contrib.auth.forms import PasswordResetForm
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.contrib import messages
 from items.models import Category, Item
 from .forms import SignUpForm
 
@@ -40,3 +44,13 @@ def signup(request):
 def logout(request):
     auth_logout(request)
     return redirect("/")
+
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get('email')  # Get email from the form
+
+        # Dummy notification that a reset link has been sent to the email
+        messages.success(request, f"A password reset link has been sent to {email}")
+
+        return render(request, 'core/forgot_password.html')
+    return render(request, 'core/forgot_password.html')
