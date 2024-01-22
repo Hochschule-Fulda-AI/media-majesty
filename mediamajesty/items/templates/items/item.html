@@ -2,7 +2,9 @@
 
 {% block title %}{{ item.name }}{% endblock %}
 
+
 {% block content %}
+
 <div class="grid grid-cols-5 gap-6">
     <div class="col-span-3">
         <img src="{{ item.thumbnail_url }}" alt="item thumbnail" class="rounded-sm" />
@@ -19,21 +21,30 @@
         <p class="text-xl font-light pt-4 pb-4">{{ item.category }}</p>
         <p class="text-xl font-normal text-gray-700">{{ item.description }}</p>
 
-
         {% if item.created_by == request.user %}
         <div class="mt-6 p-6 space-x-8 bg-white rounded-md">
             <p class="pl-8 text-lg text-gray-700">This is your item!</p>
-            <a href="{% url 'items:edit' item.id %}" class="inline-block mt-6 px-6 py-2 text-md font-semibold bg-teal-500 text-white rounded-sm hover:bg-teal-700">
+            <a href="{% url 'items:edit' item.id %}"
+                class="inline-block mt-6 px-6 py-2 text-md font-semibold bg-teal-500 text-white rounded-sm hover:bg-teal-700">
                 Edit
             </a>
-            <a href="{% url 'items:delete' item.id %}" class="inline-block mt-6 px-6 py-2 text-md font-semibold bg-red-500 text-white rounded-sm hover:bg-red-700">
+            <a href="{% url 'items:delete' item.id %}"
+                class="inline-block mt-6 px-6 py-2 text-md font-semibold bg-red-500 text-white rounded-sm hover:bg-red-700">
                 Delete
             </a>
         </div>
         {% else %}
-        <a href="{% url 'chats:new' item.id %}" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 py-2 px-4 rounded-sm">
-            Contact Seller
-        </a>
+        <a href="{% url 'chats:new' item.id %}"
+            class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold mt-6 mr-2 py-2 px-4 rounded-sm">
+            Contact Seller</a>
+        {% if item.price == 0.0 %}
+        <a href="{% url 'items:download' item.id %}"
+            class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold mt-6 py-2 px-4 rounded-sm">
+            Download </a>
+        {% else %}
+        <button class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold mt-6 py-2 px-4 rounded-sm"
+            id="purchaseBtn">Purchase</button>
+        {% endif %}
         {% endif %}
     </div>
 </div>
@@ -42,18 +53,37 @@
     <h2 class="mb-6 text-2xl text-center">Related items</h2>
     <div class="grid grid-cols-4 gap-10">
         {% for item in related_items %}
-            <div>
-                <a href="{% url 'items:item' item.id %}">
-                    <div>
-                        <img src="{{ item.thumbnail_url }}" class="rounded-t-xl"/>
-                    </div>
-                    <div class="p-6 bg-white rounded-b-xl">
-                        <h2 class="text-2xl">{{ item.name }}</h2>
-                        <p class="text-gray-500">Price: {{ item.price }}€</p>
-                    </div>
-                </a>
-            </div>
+        <div>
+            <a href="{% url 'items:item' item.id %}">
+                <div>
+                    <img src="{{ item.thumbnail_url }}" class="rounded-t-xl" />
+                </div>
+                <div class="p-6 bg-white rounded-b-xl">
+                    <h2 class="text-2xl">{{ item.name }}</h2>
+                    <p class="text-gray-500">Price: {{ item.price }}€</p>
+                </div>
+            </a>
+        </div>
         {% endfor %}
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const purchaseBtn = document.getElementById('purchaseBtn');
+
+        if (purchaseBtn) {
+            purchaseBtn.addEventListener('click', function () {
+                const isConfirmed = confirm("Are you sure you want to buy this item?");
+
+                if (isConfirmed) {
+                    purchaseBtn.innerText = "Purchase";
+                    window.location.href = "{% url 'items:download' item.id %}";
+                }
+            });
+        }
+    });
+</script>
+
 {% endblock %}

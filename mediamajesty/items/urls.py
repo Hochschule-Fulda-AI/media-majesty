@@ -4,6 +4,7 @@ from django.urls import path
 from . import views
 from . import search_view
 from . import approval_view
+from . import download_view
 
 app_name = "items"
 
@@ -21,6 +22,7 @@ urlpatterns = [
         search_view.search_suggestion,
         name="search_suggestion",
     ),
+    path("download/<int:id>/", download_view.download, name="download"),
     path("<int:id>/report/", approval_view.report_item, name="report_item"),
 
 ]

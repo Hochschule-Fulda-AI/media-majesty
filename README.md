@@ -54,16 +54,22 @@ You need to have these things set up
 
 2. Create and activate the virtual environment for local python development
 
+    ##### Creating virtual environment
+
     ```python
     cd media-majesty
 
     python3 -m venv .venv           # creating virtual environment 
+    ```
 
+    ##### Activating virtual environment
+
+    ```python
     # now activate the virtual environment;
     source .venv/bin/activate       # on unix systems
     source .venv/Scripts/activate   # on Windows (I mean why do you even use Windows really?)
 
-    
+
     # remember to activate your virtual environment
     # every time you open the IDE if it doesn't do it
     # for you automatically.
@@ -75,6 +81,7 @@ You need to have these things set up
 
 3. Install all python dependencies needed for the project
 
+    ##### Installing dependencies
     ```bash
     pip install -r development_requirements.txt 
     ```
@@ -103,6 +110,8 @@ You need to have these things set up
 
 5. Migrate the database and Run the project
 
+    ##### Database migrations with django ORM
+
     ```bash
     # if you are in the root directory first make sure to 
     # go to the directory that holds manage.py 
@@ -117,3 +126,17 @@ You need to have these things set up
 
 And _Voila!_ Hopefully everything must have went well and you should see the 
 development server running.
+
+---
+
+> **Note**
+> Please always make sure the [virtual environment is
+> activated](#activating-virtual-environment) before you start working on the
+> project. It gets messy if you install all the dependencies outside the
+> virtual environment and can cause problems later with the Operating System
+> python packages.
+
+> Also, make sure that in case of breaking changes that require additional
+> dependencies or database updates, you [install the new
+> dependencies](#installing-dependencies) and [migrate the
+> database](#database-migrations-with-django-orm) if needed.
