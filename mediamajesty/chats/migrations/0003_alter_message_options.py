@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('chats', '0002_conversation_last_message'),
+        ("chats", "0002_conversation_last_message"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='message',
-            options={'ordering': ('-created_at',)},
+            name="message",
+            options={"ordering": ("-created_at",)},
         ),
     ]
