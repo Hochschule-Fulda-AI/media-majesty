@@ -79,6 +79,16 @@
     </footer>
     
     {% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toggleBtn = document.getElementById('toggleBtn');
+            var navLinks = document.getElementById('navLinks');
+
+            toggleBtn.addEventListener('click', function () {
+                navLinks.classList.toggle('hidden');
+            });
+        });
+    </script>
     {% endblock %}
 </body>
 

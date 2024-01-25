@@ -36,7 +36,7 @@
 
       <!-- mobile version with an icon -->
       <button type="submit"
-        class="md:hidden px-3 py-2 rounded-md text-white bg-teal-600 hover:bg-teal-700" id="chat-message-submit">
+        class="md:hidden px-3 py-2 rounded-md text-white bg-teal-600 hover:bg-teal-700" id="chat-message-submit-mobile">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
           class="h-6 w-6">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -52,6 +52,7 @@
 {% block scripts %}
 <script>
     const chatMessageSubmit = document.getElementById('chat-message-submit');
+    const chatMessageSubmitMobile = document.getElementById('chat-message-submit-mobile');
     const chatMessageInput = document.getElementById('chat-message-input');
     const chatMessages = document.getElementById('chat-messages');
     const roomName = JSON.parse(document.getElementById('roomname').textContent);
@@ -93,5 +94,16 @@
         }));
         chatMessageInput.value = '';
     }
+    
+    chatMessageSubmitMobile.onclick = (e) => {
+      e.preventDefault();
+      const message = chatMessageInput.value;
+      chatSocket.send(JSON.stringify({
+          'room': roomName,
+          'sender': userName,
+          'message': message,
+      }));
+      chatMessageInput.value = '';
+  }
 </script>
 {% endblock %}
