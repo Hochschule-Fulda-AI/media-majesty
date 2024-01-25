@@ -7,6 +7,7 @@
 
     <form action="{% url 'items:index' %}" class="w-full mb-4 sm:mb-10 flex items-center" autocomplete="off">
         <input type="text" name="search" id="searchInput" placeholder="Search" class="py-3 px-4 sm:px-6 border w-full rounded-md" value="{{ search }}">
+
     </form>
 
     <div id="suggestionsContainer" class="w-full mb-4">
@@ -18,6 +19,7 @@
             <p class="font-semibold">Categories</p>
             <ul class="mt-2 sm:mt-4">
                 {% for category in categories %}
+
                 <li class="mb-2 p-2 sm:p-4 {% if category.id == category_id %} bg-gray-200 {% endif %}">
                     <a href="{% url 'items:index' %}?search={{ search }}&category={{ category.id }}" class="text-gray-500 hover:text-gray-700">{{ category.name }}</a>
                 </li>
@@ -27,6 +29,11 @@
             <ul>
                 <li><a href="{% url 'items:index' %}" class="mt-2 sm:mt-6 ml-4 py-2 px-4 sm:px-6 inline-block bg-yellow-500 hover:bg-yellow-600 rounded-md text-base sm:text-lg text-white font-medium">Clear</a></li>
             </ul>
+            <div class="text-center mb-4">
+                <a href="{% url 'items:index' %}"
+                    class="mt-8 py-2 px-4 inline-block bg-yellow-500 hover:bg-yellow-600 rounded-md text-lg text-white font-medium">Clear
+                    Filters</a>
+            </div>
         </div>
 
         <div class="col-span-1 sm:col-span-3">
@@ -43,6 +50,7 @@
                         </div>
                     </a>
                 </div>
+
                 {% endfor %}
             </div>
         </div>
@@ -54,34 +62,45 @@
 {% block scripts %}
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    $(document).ready(function() {
-        var searchInput = $("#searchInput");
-        var suggestionsContainer = $("#suggestionsContainer");
+    $(document).ready(function () {
+        const searchInput = $("#searchInput");
+        const suggestionsContainer = $("#suggestionsContainer");
+        const minPrice = $("#min_price");
+        const maxPrice = $("#max_price");
+        const applyPrice = $("#apply-price");
 
-        searchInput.on("input", function() {
-            var userInput = searchInput.val();
+        applyPrice.on("click", function () {
+            const minPriceValue = minPrice.val();
+            const maxPriceValue = maxPrice.val();
+            window.location.href = "{% url 'items:index' %}?min_price=" + minPriceValue + "&max_price=" + maxPriceValue;
+        });
+
+        suggestionsContainer.hide();
+
+        searchInput.on("input", function () {
+            const userInput = searchInput.val();
 
             $.ajax({
                 url: "{% url 'items:search_suggestion' %}",
                 method: "GET",
-                data: { "query": userInput },
-                success: function(data) {
+                data: {"query": userInput},
+                success: function (data) {
                     updateSuggestions(data);
                 },
-                error: function(error) {
-                    console.log("Error:", error);
+                error: function (error) {
+                    console.error("Error:", error);
                 }
             });
         });
 
         function updateSuggestions(suggestions) {
-            var suggestionsList = $("#suggestionsList");
+            const suggestionsList = $("#suggestionsList");
             suggestionsList.empty();
 
             if (suggestions.length === 0) {
                 suggestionsList.append("<li class='py-2 px-4 text-gray-500'>No suggestions found</li>");
             } else {
-                suggestions.forEach(function(suggestion) {
+                suggestions.forEach(function (suggestion) {
                     suggestionsList.append("<li class='py-2 px-4 hover:bg-gray-100 cursor-pointer' data-item-id='" + suggestion.id + "'>" + suggestion.name + "</li>");
                 });
             }
@@ -93,13 +112,13 @@
             }
         }
 
-        $(document).on("click", "#suggestionsList li", function() {
-            var itemId = $(this).data("item-id");
+        $(document).on("click", "#suggestionsList li", function () {
+            const itemId = $(this).data("item-id");
             window.location.href = "/items/" + itemId + "/";
         });
 
-        searchInput.on("keyup", function() {
-            var userInput = searchInput.val();
+        searchInput.on("keyup", function () {
+            const userInput = searchInput.val();
             if (userInput.trim() === "") {
                 suggestionsContainer.hide();
             }
