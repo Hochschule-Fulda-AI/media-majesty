@@ -59,7 +59,7 @@ You need to have these things set up
     ```python
     cd media-majesty
 
-    python3 -m venv .venv           # creating virtual environment 
+    python3 -m venv .venv           # creating virtual environment
     ```
 
     ##### Activating virtual environment
@@ -74,8 +74,8 @@ You need to have these things set up
     # every time you open the IDE if it doesn't do it
     # for you automatically.
 
-    # to check if you have activated the virtual environment, 
-    # you could run 
+    # to check if you have activated the virtual environment,
+    # you could run
     which pip # it should point to the directory that you are in
     ```
 
@@ -83,7 +83,7 @@ You need to have these things set up
 
     ##### Installing dependencies
     ```bash
-    pip install -r development_requirements.txt 
+    pip install -r development_requirements.txt
     ```
 
 4. Create the necessary environment file to run the project
@@ -113,18 +113,18 @@ You need to have these things set up
     ##### Database migrations with django ORM
 
     ```bash
-    # if you are in the root directory first make sure to 
-    # go to the directory that holds manage.py 
+    # if you are in the root directory first make sure to
+    # go to the directory that holds manage.py
     cd mediamajesty
 
     # run the SQL migrations
-    python manage.py migrate 
+    python manage.py migrate
 
     # run the development server
     python manage.py runserver
     ```
 
-And _Voila!_ Hopefully everything must have went well and you should see the 
+And _Voila!_ Hopefully everything must have went well and you should see the
 development server running.
 
 ---

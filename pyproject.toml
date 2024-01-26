@@ -1,0 +1,10 @@
+[project]
+requires-python = ">=3.10"
+
+[tool.ruff]
+# C4: flake-8 Comprehensions: https://docs.astral.sh/ruff/rules/#flake8-comprehensions-c4
+# I: flake-8 Isort: https://docs.astral.sh/ruff/rules/#isort-i
+# SIM: flake-8 Simplicity: https://docs.astral.sh/ruff/rules/#flake8-simplify-sim
+# TCH: flake-8 Type-checking: https://docs.astral.sh/ruff/rules/#flake8-type-checking-tch
+extend-select = ["C4", "I", "SIM", "TCH"]
+ignore = []

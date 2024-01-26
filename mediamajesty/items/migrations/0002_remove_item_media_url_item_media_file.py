@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('items', '0001_initial'),
+        ("items", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='item',
-            name='media_url',
+            model_name="item",
+            name="media_url",
         ),
         migrations.AddField(
-            model_name='item',
-            name='media_file',
-            field=models.FileField(default='', upload_to='uploads/'),
+            model_name="item",
+            name="media_file",
+            field=models.FileField(default="", upload_to="uploads/"),
         ),
     ]

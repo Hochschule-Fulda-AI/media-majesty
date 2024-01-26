@@ -1,7 +1,7 @@
 from django import forms
+from utils.constants import HTML_ACCEPTED_FILE_EXTENSIONS
 
 from .models import Item
-from utils.constants import HTML_ACCEPTED_FILE_EXTENSIONS
 
 INPUT_CLASSES = "w-full py-4 px-2 rounded-md border"
 

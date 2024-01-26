@@ -1,5 +1,6 @@
-import requests
 from tempfile import NamedTemporaryFile
+
+import requests
 from django.core.files import File
 
 
