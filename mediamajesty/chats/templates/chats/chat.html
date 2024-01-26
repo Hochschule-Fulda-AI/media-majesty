@@ -37,14 +37,14 @@
         id="chat-message-submit">Send</button>
 
       <!-- mobile version with an icon -->
-      <button type="submit"
-        class="md:hidden px-3 py-2 rounded-md text-white bg-teal-600 hover:bg-teal-700" id="chat-message-submit-mobile">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-          class="h-6 w-6">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      <button type="submit" class="md:hidden px-3 py-2 rounded-md text-white bg-teal-600 hover:bg-teal-700" id="chat-message-submit-mobile">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L11 13 2 2"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L15 22 11 13 2 2"></path>
         </svg>
       </button>
+      
+      
     </form>
     {{ conversation.id|json_script:"roomname" }}
     {{ user.username|json_script:"username" }}
@@ -70,21 +70,26 @@
     );
 
     chatSocket.onmessage = (e) => {
-        if (document.getElementById('no-message-box')) {
-            document.getElementById('no-message-box').remove();
-        }
-        if (chatMessages.children.length >= 10) {
-            chatMessages.removeChild(chatMessages.children[0]);
-        }
-        const data = JSON.parse(e.data);
-        const messageElement = document.createElement('p');
-        messageElement.innerHTML = '<b>' + data['sender'] + '</b>: ' + data['message'];
-        chatMessages.appendChild(messageElement);
-    }
-
-    chatSocket.onclose = (e) => {
-        console.error('Chat socket closed unexpectedly');
-    };
+      if (document.getElementById('no-message-box')) {
+          document.getElementById('no-message-box').remove();
+      }
+  
+      if (chatMessages.children.length >= 10) {
+          chatMessages.removeChild(chatMessages.children[0]);
+      }
+  
+      const data = JSON.parse(e.data);
+  
+      const messageContainer = document.createElement('div');
+      messageContainer.className = data.sender === userName ? 'chat chat-end' : 'chat chat-start';
+  
+      const messageBubble = document.createElement('div');
+      messageBubble.className = data.sender === userName ? 'chat-bubble chat-bubble-success' : 'chat-bubble';
+      messageBubble.innerHTML = data.message;
+  
+      messageContainer.appendChild(messageBubble);
+      chatMessages.appendChild(messageContainer);
+  };
 
     chatMessageSubmit.onclick = (e) => {
         e.preventDefault();
@@ -106,6 +111,13 @@
           'message': message,
       }));
       chatMessageInput.value = '';
-  }
+  };
+
+  const toggleBtn = document.getElementById('toggleBtn');
+  const navLinks = document.getElementById('navLinks');
+
+  toggleBtn.addEventListener('click', function () {
+      navLinks.classList.toggle('hidden');
+  });
 </script>
 {% endblock %}
