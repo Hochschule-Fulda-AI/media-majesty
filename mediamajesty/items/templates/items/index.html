@@ -5,29 +5,43 @@
 {% block content %}
 <div class="container mx-auto mt-8">
 
-    <form action="{% url 'items:index' %}" class="w-full mb-4 sm:mb-10 flex items-center" autocomplete="off">
-        <input type="text" name="search" id="searchInput" placeholder="Search" class="py-3 px-4 sm:px-6 border w-full rounded-md" value="{{ search }}">
-
+    <form action="{% url 'items:index' %}" class="w-full mb-10 flex items-center" autocomplete="off">
+        <input type="text" name="search" id="searchInput" placeholder="Search"
+            class="py-4 px-6 border w-full rounded-l-md" value="{{ search }}">
     </form>
 
     <div id="suggestionsContainer" class="w-full mb-4">
         <ul id="suggestionsList" class="list-none p-2 bg-white shadow-md rounded-md"></ul>
     </div>
 
-    <div class="pb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <div class="mb-4 bg-gray-100 p-2 sm:p-4 rounded-md">
+    <div class="pb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div class="bg-gray-100 p-6 rounded-md">
             <p class="font-semibold">Categories</p>
-            <ul class="mt-2 sm:mt-4">
+            <ul class="mt-4">
                 {% for category in categories %}
-
-                <li class="mb-2 p-2 sm:p-4 {% if category.id == category_id %} bg-gray-200 {% endif %}">
-                    <a href="{% url 'items:index' %}?search={{ search }}&category={{ category.id }}" class="text-gray-500 hover:text-gray-700">{{ category.name }}</a>
+                <li class="mb-2 p-4 {% if category.id == category_id %} bg-gray-200 {% endif %}">
+                    <a href="{% url 'items:index' %}?search={{ search }}&category={{ category.id }}"
+                        class="text-gray-500 hover:text-gray-700">{{ category.name }}</a>
                 </li>
                 {% endfor %}
             </ul>
-            <p class="font-semibold mt-4">Clear Filters</p>
-            <ul>
-                <li><a href="{% url 'items:index' %}" class="mt-2 sm:mt-6 ml-4 py-2 px-4 sm:px-6 inline-block bg-yellow-500 hover:bg-yellow-600 rounded-md text-base sm:text-lg text-white font-medium">Clear</a></li>
+
+            <p class="font-semibold">Filters</p>
+            <ul class="mt-4">
+                <li class="p-4">
+                    <label for="min_price" class="block text-gray-500 mb-2">Minimum Price:</label>
+                    <input type="number" name="min_price" id="min_price" placeholder="minimum price"
+                        class="py-2 px-4 w-full md:w-5/6 border rounded-md" value="{{ request.GET.min_price }}">
+                </li>
+                <li class="p-4">
+                    <label for="max_price" class="block text-gray-500 mb-2">Maximum Price:</label>
+                    <input type="number" name="max_price" id="max_price" placeholder="maximum price"
+                        class="py-2 px-4 w-full md:w-5/6 border rounded-md" value="{{ request.GET.max_price }}">
+                </li>
+                <li>
+                    <button class="my-2 md:ml-4 py-2 px-4 bg-blue-500 hover:bg-blue-600 rounded-md text-white font-medium"
+                        id="apply-price">Apply Price</button>
+                </li>
             </ul>
             <div class="text-center mb-4">
                 <a href="{% url 'items:index' %}"
@@ -36,27 +50,25 @@
             </div>
         </div>
 
-        <div class="col-span-1 sm:col-span-3">
-            <div class="grid grid-cols-1 gap-4 sm:gap-6">
+        <div class="col-span-1 md:col-span-2 lg:col-span-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                 {% for item in items %}
-                <div class="mb-4">
+                <div>
                     <a href="{% url 'items:item' item.id %}">
                         <div>
-                            <img src="{{ item.thumbnail_url }}" class="w-full h-40 object-cover rounded-t-xl" />
+                            <img src="{{ item.thumbnail_url }}" class="rounded-t-xl" />
                         </div>
-                        <div class="p-4 bg-white rounded-b-xl">
-                            <h2 class="text-base sm:text-xl mb-2">{{ item.name }}</h2>
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl mb-2">{{ item.name }}</h2>
                             <p class="text-gray-500">Price: {{ item.price }}€</p>
                         </div>
                     </a>
                 </div>
-
                 {% endfor %}
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}

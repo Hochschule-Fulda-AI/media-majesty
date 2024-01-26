@@ -11,9 +11,11 @@
     <div class="chat-messages space-y-3" id="chat-messages">
       {% if messages %}
       {% for m in messages %}
-      <p>
-        <b>{{ m.sender }}</b>: {{ m.content }}
-      </p>
+        <div class= "{% if m.sender == request.user %}chat chat-end{% else %}chat chat-start{% endif %}">
+          <div class="chat-bubble {% if m.sender == request.user %}chat-bubble chat-bubble-success{% endif %}">
+            {{ m.content }}
+          </div>
+        </div>
       {% endfor %}
       {% else %}
       <p class="text-center" id="no-message-box">No messages sent to {{ partner }} yet...</p>
@@ -94,7 +96,7 @@
         }));
         chatMessageInput.value = '';
     }
-    
+
     chatMessageSubmitMobile.onclick = (e) => {
       e.preventDefault();
       const message = chatMessageInput.value;

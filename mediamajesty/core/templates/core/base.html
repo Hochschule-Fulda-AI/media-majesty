@@ -5,6 +5,7 @@
     <title>{% block title %}{% endblock %} | Media Majesty</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -20,7 +21,7 @@
                 </svg>
             </button>
         </div>
-        <div id="navLinks" class="hidden sm:flex space-x-6">
+        <div id="navLinks" class="hidden lg:flex flex-col lg:flex-row space-x-6">
             {% if request.user.is_authenticated %}
             {% if request.user.is_superuser %}
             <a href="{% url 'items:pending_items' %}" class="text-sm font-medium hover:text-gray-500">Pending Items</a>
@@ -34,15 +35,15 @@
             <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
             <a href="{% url 'chats:index' %}" class="text-sm font-medium hover:text-gray-500">Inbox</a>
             <a href="{% url 'core:logout' %}"
-                class="text-sm px-6 py-3 font-medium bg-red-500 text-white hover:bg-red-700 rounded-sm">Logout</a>
+                class="text-sm px-4 py-2 font-medium bg-red-500 text-white hover:bg-red-700 rounded-sm">Logout</a>
             {% else %}
             <a href="{% url 'core:contact' %}" class="text-sm font-medium hover:text-gray-500">Contact</a>
             <a href="{% url 'core:about' %}" class="text-sm font-medium hover:text-gray-500">About</a>
             <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
             <a href="{% url 'core:signup' %}"
-                class="text-sm px-6 py-3 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
+                class="text-sm px-4 py-2 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
             <a href="{% url 'core:login' %}"
-                class="text-sm px-6 py-3 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log in</a>
+                class="text-sm px-4 py-2 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log in</a>
             {% endif %}
         </div>
     </nav>
