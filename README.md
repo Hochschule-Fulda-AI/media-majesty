@@ -82,8 +82,12 @@ You need to have these things set up
 3. Install all python dependencies needed for the project
 
     ##### Installing dependencies
+    this is now a platform specific process to ensure cross-platform compatibility
+
     ```bash
-    pip install -r development_requirements.txt
+    pip install pip-tools
+    pip-compile requirements.in
+    pip install -r requirements.txt
     ```
 
 4. Create the necessary environment file to run the project
@@ -101,6 +105,10 @@ You need to have these things set up
     DATABASE_PASSWORD="<database password>"
     DATABASE_HOST="<localhost or remote host domain if you are hosting one>"
     DATABASE_PORT="<since we are using mysql, it is generally 3306>"
+    DEFAULT_FILE_STORAGE="storages.backends.azure_storage.AzureStorage"
+    AZURE_ACCOUNT_NAME="<your azure credentials>"
+    AZURE_ACCOUNT_KEY="<your azure credentials>"
+    AZURE_CONTAINER="<your azure container name>"
     ```
 
 > **Note**:
@@ -124,8 +132,23 @@ You need to have these things set up
     python manage.py runserver
     ```
 
-And _Voila!_ Hopefully everything must have went well and you should see the
-development server running.
+    And _Voila!_ Hopefully everything must have went well and you should see the
+    development server running.
+
+6. One final note, install pre-commit:
+
+    Before you make changes and do your commit for the first time after you clone
+    this repository, make sure to install pre-commit into your git hooks so it can
+    run automatically and make checks when you do a commit.
+
+    ```bash
+    # this installs pre-commit to your git hooks
+    pre-commit install
+    ```
+
+    Also, if you make any additional changes to the pre-commit configuration
+    file `.pre-commit-config.yaml`, then you should run ths file again to make
+    sure the new version is installed.
 
 ---
 
