@@ -12,7 +12,7 @@
     <nav class="px-4 sm:px-8 md:px-16 lg:px-20 xl:px-40 py-4 sm:py-6 lg:py-10 flex flex-col sm:flex-row justify-between items-center border-b border-gray-200">
         <div class="flex items-center justify-between w-full sm:w-auto">
             <a href="/" class="text-xl font-semibold mb-4 sm:mb-0">Media Majesty</a>
-            <button id="toggleBtn" class="sm:hidden block text-gray-500 hover:text-gray-300">
+            <button id="toggleBtn" class="lg:hidden block text-gray-500 hover:text-gray-300">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -34,15 +34,15 @@
             <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
             <a href="{% url 'chats:index' %}" class="text-sm font-medium hover:text-gray-500">Inbox</a>
             <a href="{% url 'core:logout' %}"
-                class="text-sm px-4 py-2 font-medium bg-red-500 text-white hover:bg-red-700 rounded-sm">Logout</a>
+                class="text-sm px-2 md:px-4 py-2 font-medium bg-red-500 text-white hover:bg-red-700 rounded-sm">Logout</a>
             {% else %}
             <a href="{% url 'core:contact' %}" class="text-sm font-medium hover:text-gray-500">Contact</a>
             <a href="{% url 'core:about' %}" class="text-sm font-medium hover:text-gray-500">About</a>
             <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
             <a href="{% url 'core:signup' %}"
-                class="text-sm px-4 py-2 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
+                class="text-sm px-2 md:px-4 py-2 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
             <a href="{% url 'core:login' %}"
-                class="text-sm px-4 py-2 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log in</a>
+                class="text-sm px-2 md:px-4 py-2 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log in</a>
             {% endif %}
         </div>
     </nav>
@@ -78,7 +78,6 @@
         </div>
     </footer>
     
-    {% block scripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var toggleBtn = document.getElementById('toggleBtn');
@@ -89,6 +88,8 @@
             });
         });
     </script>
+
+    {% block scripts %}
     {% endblock %}
 </body>
 

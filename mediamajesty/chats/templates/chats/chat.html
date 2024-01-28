@@ -33,18 +33,14 @@
       <input type="text" name="content" class="flex-1 mr-3 p-4 border rounded-md" placeholder="Your message..."
         id="chat-message-input">
 
-      <button type="submit" class="hidden md:inline px-5 py-3 rounded-md text-white bg-teal-600 hover:bg-teal-700"
-        id="chat-message-submit">Send</button>
-
-      <!-- mobile version with an icon -->
-      <button type="submit" class="md:hidden px-3 py-2 rounded-md text-white bg-teal-600 hover:bg-teal-700" id="chat-message-submit-mobile">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+      <button type="submit" class="hidden md:inline md:flex items-center px-5 py-3 rounded-md text-white bg-teal-600 hover:bg-teal-700" id="chat-message-submit">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 mr-2">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L11 13 2 2"></path>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L15 22 11 13 2 2"></path>
         </svg>
+        <span class="hidden md:inline">Send</span>
       </button>
-      
-      
+    
     </form>
     {{ conversation.id|json_script:"roomname" }}
     {{ user.username|json_script:"username" }}
@@ -101,17 +97,6 @@
         }));
         chatMessageInput.value = '';
     }
-
-    chatMessageSubmitMobile.onclick = (e) => {
-      e.preventDefault();
-      const message = chatMessageInput.value;
-      chatSocket.send(JSON.stringify({
-          'room': roomName,
-          'sender': userName,
-          'message': message,
-      }));
-      chatMessageInput.value = '';
-  };
 
   const toggleBtn = document.getElementById('toggleBtn');
   const navLinks = document.getElementById('navLinks');
