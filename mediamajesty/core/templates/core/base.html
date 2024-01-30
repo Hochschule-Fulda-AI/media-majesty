@@ -34,15 +34,15 @@
             <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
             <a href="{% url 'chats:index' %}" class="text-sm font-medium hover:text-gray-500">Inbox</a>
             <a href="{% url 'core:logout' %}"
-                class="text-sm px-2 md:px-4 py-2 font-medium bg-red-500 text-white hover:bg-red-700 rounded-sm">Logout</a>
+                class="text-sm px-4 py-2 font-medium bg-red-500 text-white hover:bg-red-700 rounded-sm">Logout</a>
             {% else %}
             <a href="{% url 'core:contact' %}" class="text-sm font-medium hover:text-gray-500">Contact</a>
             <a href="{% url 'core:about' %}" class="text-sm font-medium hover:text-gray-500">About</a>
             <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
             <a href="{% url 'core:signup' %}"
-                class="text-sm px-2 md:px-4 py-2 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
+                class="text-sm px-4 py-2 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign up</a>
             <a href="{% url 'core:login' %}"
-                class="text-sm px-2 md:px-4 py-2 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log in</a>
+                class="text-sm px-4 py-2 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log in</a>
             {% endif %}
         </div>
     </nav>
@@ -78,6 +78,7 @@
         </div>
     </footer>
     
+    {% block scripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var toggleBtn = document.getElementById('toggleBtn');
@@ -88,8 +89,6 @@
             });
         });
     </script>
-
-    {% block scripts %}
     {% endblock %}
 </body>
 
