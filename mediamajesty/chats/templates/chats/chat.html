@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Chat {{partner}}{% endblock %}
+{% block title %}Chat {{ partner }}{% endblock %}
 
 {% block content %}
   <div class="p-4 md:p-10 lg:p-20 text-center">
@@ -10,41 +10,48 @@
   <div class="lg:w-2/4 mx-4 lg:mx-auto p-4 bg-gray-100 rounded-xl">
     <div class="chat-messages space-y-3" id="chat-messages">
       {% if messages %}
-      {% for m in messages %}
-        <div class= "{% if m.sender == request.user %}chat chat-end{% else %}chat chat-start{% endif %}">
-          <div class="chat-bubble {% if m.sender == request.user %}chat-bubble chat-bubble-success{% endif %}">
-            {{ m.content }}
-          </div>
-        </div>
-      {% endfor %}
+        {% with messages.0.sender as current_sender %}
+          {% for m in messages %}
+            <div class="{% if m.sender == request.user %}chat chat-end{% else %}chat chat-start{% endif %}">
+              {% if forloop.first or m.sender != current_sender %}
+                <div class="chat-image avatar">
+                  <div class="w-10 rounded-full">
+                    <img alt="Person Icon" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
+                  </div>
+                </div>
+              {% endif %}
+              <div class="chat-bubble {% if m.sender == request.user %}chat-bubble chat-bubble-success{% endif %}">
+                {{ m.content }}
+              </div>
+            </div>
+            {% if m.sender != current_sender %}
+              {% with m.sender as current_sender %}
+              {% endwith %}
+            {% endif %}
+          {% endfor %}
+        {% endwith %}
       {% else %}
-      <p class="text-center" id="no-message-box">No messages sent to {{ partner }} yet...</p>
+        <p class="text-center" id="no-message-box">No messages sent to {{ partner }} yet...</p>
       {% endif %}
     </div>
   </div>
 
   <div class="lg:w-2/4 mt-6 mx-4 lg:mx-auto p-4 bg-white rounded-xl">
-
     {% if request.user == conversation.buyer %}
-    <button class="w-full mb-4 px-4 py-3 rounded-lg text-white bg-blue-500 hover:bg-blue-700">Make an offer</button>
+      <button class="w-full mb-4 px-4 py-3 rounded-lg text-white bg-blue-500 hover:bg-blue-700">Make an offer</button>
     {% endif %}
     <form method="post" action="." class="flex" autocomplete="off">
       {% csrf_token %}
-      <input type="text" name="content" class="flex-1 mr-3 p-4 border rounded-md" placeholder="Your message..."
-        id="chat-message-input">
+      <input type="text" name="content" class="flex-1 mr-3 p-4 border rounded-md" placeholder="Your message..." id="chat-message-input">
 
-      <button type="submit" class="hidden md:inline px-5 py-3 rounded-md text-white bg-teal-600 hover:bg-teal-700"
-        id="chat-message-submit">Send</button>
+      <button type="submit" class="hidden md:inline px-5 py-3 rounded-md text-white bg-teal-600 hover:bg-teal-700" id="chat-message-submit">Send</button>
 
       <!-- mobile version with an icon -->
       <button type="submit" class="md:hidden px-3 py-2 rounded-md text-white bg-teal-600 hover:bg-teal-700" id="chat-message-submit-mobile">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L11 13 2 2"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L15 22 11 13 2 2"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path>
         </svg>
       </button>
-      
-      
     </form>
     {{ conversation.id|json_script:"roomname" }}
     {{ user.username|json_script:"username" }}
@@ -53,71 +60,79 @@
 
 {% block scripts %}
 <script>
-    const chatMessageSubmit = document.getElementById('chat-message-submit');
-    const chatMessageSubmitMobile = document.getElementById('chat-message-submit-mobile');
-    const chatMessageInput = document.getElementById('chat-message-input');
-    const chatMessages = document.getElementById('chat-messages');
-    const roomName = JSON.parse(document.getElementById('roomname').textContent);
-    const userName = JSON.parse(document.getElementById('username').textContent);
-    chatMessageInput.focus();
+  const chatMessageSubmit = document.getElementById('chat-message-submit');
+  const chatMessageSubmitMobile = document.getElementById('chat-message-submit-mobile');
+  const chatMessageInput = document.getElementById('chat-message-input');
+  const chatMessages = document.getElementById('chat-messages');
+  const roomName = JSON.parse(document.getElementById('roomname').textContent);
+  const userName = JSON.parse(document.getElementById('username').textContent);
+  let currentSender = null;
+  chatMessageInput.focus();
 
-    const chatSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/chat/'
-        + roomName
-        + '/'
-    );
-
-    chatSocket.onmessage = (e) => {
-      if (document.getElementById('no-message-box')) {
-          document.getElementById('no-message-box').remove();
-      }
+  const chatSocket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/chat/'
+    + roomName
+    + '/'
+  );
   
-      if (chatMessages.children.length >= 10) {
-          chatMessages.removeChild(chatMessages.children[0]);
-      }
-  
-      const data = JSON.parse(e.data);
-  
-      const messageContainer = document.createElement('div');
-      messageContainer.className = data.sender === userName ? 'chat chat-end' : 'chat chat-start';
-  
-      const messageBubble = document.createElement('div');
-      messageBubble.className = data.sender === userName ? 'chat-bubble chat-bubble-success' : 'chat-bubble';
-      messageBubble.innerHTML = data.message;
-  
-      messageContainer.appendChild(messageBubble);
-      chatMessages.appendChild(messageContainer);
-  };
-
-    chatMessageSubmit.onclick = (e) => {
-        e.preventDefault();
-        const message = chatMessageInput.value;
-        chatSocket.send(JSON.stringify({
-            'room': roomName,
-            'sender': userName,
-            'message': message,
-        }));
-        chatMessageInput.value = '';
+  chatSocket.onmessage = (e) => {
+    if (document.getElementById('no-message-box')) {
+      document.getElementById('no-message-box').remove();
     }
-
-    chatMessageSubmitMobile.onclick = (e) => {
-      e.preventDefault();
-      const message = chatMessageInput.value;
-      chatSocket.send(JSON.stringify({
-          'room': roomName,
-          'sender': userName,
-          'message': message,
-      }));
-      chatMessageInput.value = '';
+  
+    if (chatMessages.children.length >= 10) {
+      chatMessages.removeChild(chatMessages.children[0]);
+    }
+  
+    const data = JSON.parse(e.data);
+  
+    const messageContainer = document.createElement('div');
+    messageContainer.className = data.sender === userName ? 'chat chat-end' : 'chat chat-start';
+  
+    const messageImage = document.createElement('div');
+    messageImage.className = 'chat-image avatar';
+    const imageContainer = document.createElement('div');
+    imageContainer.className = 'w-10 rounded-full';
+    const image = document.createElement('img');
+    image.alt = 'Person Icon';
+    image.src = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+    imageContainer.appendChild(image);
+    messageImage.appendChild(imageContainer);
+  
+    const messageBubble = document.createElement('div');
+    messageBubble.className = data.sender === userName ? 'chat-bubble chat-bubble-success' : 'chat-bubble';
+    messageBubble.innerHTML = data.message;
+  
+    messageContainer.appendChild(messageImage);
+    messageContainer.appendChild(messageBubble);
+    chatMessages.appendChild(messageContainer);
+  
+    
+    currentSender = data.sender;
   };
+  
+  const sendMessage = (e) => {
+    e.preventDefault();
+    const message = chatMessageInput.value;
+    chatSocket.send(JSON.stringify({
+      'room': roomName,
+      'sender': userName,
+      'message': message,
+    }));
+    chatMessageInput.value = '';
+    chatMessageInput.focus(); 
+  };
+  
+  chatMessageSubmit.onclick = sendMessage;
+  chatMessageSubmitMobile.onclick = sendMessage;
 
   const toggleBtn = document.getElementById('toggleBtn');
   const navLinks = document.getElementById('navLinks');
 
   toggleBtn.addEventListener('click', function () {
-      navLinks.classList.toggle('hidden');
+    navLinks.classList.toggle('hidden');
   });
 </script>
 {% endblock %}

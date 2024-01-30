@@ -12,7 +12,8 @@
     <nav class="px-4 sm:px-8 md:px-16 lg:px-20 xl:px-40 py-4 sm:py-6 lg:py-10 flex flex-col sm:flex-row justify-between items-center border-b border-gray-200">
         <div class="flex items-center justify-between w-full sm:w-auto">
             <a href="/" class="text-xl font-semibold mb-4 sm:mb-0">Media Majesty</a>
-            <button id="toggleBtn" class="lg:hidden block text-gray-500 hover:text-gray-300">
+            <button id="toggleBtn" class="lg:hidden block text-gray-500 hover:text-gray-300 order-2 sm:order-1">
+
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -20,7 +21,8 @@
                 </svg>
             </button>
         </div>
-        <div id="navLinks" class="hidden lg:flex flex-col lg:flex-row space-x-6">
+        <div id="navLinks" class="hidden flex flex-col sm:flex sm:flex-row space-x-6">
+            
             {% if request.user.is_authenticated %}
             {% if request.user.is_superuser %}
             <a href="{% url 'items:pending_items' %}" class="text-sm font-medium hover:text-gray-500">Pending Items</a>
