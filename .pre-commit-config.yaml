@@ -1,0 +1,16 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+    -   id: check-ast
+    -   id: check-added-large-files
+    -   id: trailing-whitespace
+    -   id: requirements-txt-fixer
+    -   id: debug-statements
+
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.1.14 # Ruff version.
+  hooks:
+    - id: ruff # Run the linter.
+    - id: ruff-format # Run the formatter.

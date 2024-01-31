@@ -1,12 +1,8 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
-from django.shortcuts import render, redirect
-from django.shortcuts import render
-from django.contrib.auth.forms import PasswordResetForm
-from django.core.mail import send_mail
-from django.urls import reverse
-from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
 from items.models import Category, Item
+
 from .forms import SignUpForm
 
 

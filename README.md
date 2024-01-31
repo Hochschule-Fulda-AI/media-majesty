@@ -59,7 +59,7 @@ You need to have these things set up
     ```python
     cd media-majesty
 
-    python3 -m venv .venv           # creating virtual environment 
+    python3 -m venv .venv           # creating virtual environment
     ```
 
     ##### Activating virtual environment
@@ -74,16 +74,20 @@ You need to have these things set up
     # every time you open the IDE if it doesn't do it
     # for you automatically.
 
-    # to check if you have activated the virtual environment, 
-    # you could run 
+    # to check if you have activated the virtual environment,
+    # you could run
     which pip # it should point to the directory that you are in
     ```
 
 3. Install all python dependencies needed for the project
 
     ##### Installing dependencies
+    this is now a platform specific process to ensure cross-platform compatibility
+
     ```bash
-    pip install -r development_requirements.txt 
+    pip install pip-tools
+    pip-compile requirements.in
+    pip install -r requirements.txt
     ```
 
 4. Create the necessary environment file to run the project
@@ -101,6 +105,10 @@ You need to have these things set up
     DATABASE_PASSWORD="<database password>"
     DATABASE_HOST="<localhost or remote host domain if you are hosting one>"
     DATABASE_PORT="<since we are using mysql, it is generally 3306>"
+    DEFAULT_FILE_STORAGE="storages.backends.azure_storage.AzureStorage"
+    AZURE_ACCOUNT_NAME="<your azure credentials>"
+    AZURE_ACCOUNT_KEY="<your azure credentials>"
+    AZURE_CONTAINER="<your azure container name>"
     ```
 
 > **Note**:
@@ -113,19 +121,34 @@ You need to have these things set up
     ##### Database migrations with django ORM
 
     ```bash
-    # if you are in the root directory first make sure to 
-    # go to the directory that holds manage.py 
+    # if you are in the root directory first make sure to
+    # go to the directory that holds manage.py
     cd mediamajesty
 
     # run the SQL migrations
-    python manage.py migrate 
+    python manage.py migrate
 
     # run the development server
     python manage.py runserver
     ```
 
-And _Voila!_ Hopefully everything must have went well and you should see the 
-development server running.
+    And _Voila!_ Hopefully everything must have went well and you should see the
+    development server running.
+
+6. One final note, install pre-commit:
+
+    Before you make changes and do your commit for the first time after you clone
+    this repository, make sure to install pre-commit into your git hooks so it can
+    run automatically and make checks when you do a commit.
+
+    ```bash
+    # this installs pre-commit to your git hooks
+    pre-commit install
+    ```
+
+    Also, if you make any additional changes to the pre-commit configuration
+    file `.pre-commit-config.yaml`, then you should run ths file again to make
+    sure the new version is installed.
 
 ---
 

@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
-
+from django.shortcuts import get_object_or_404, redirect, render
 from items.models import Item
+
 from .models import Conversation, Message
 
 
@@ -11,9 +11,7 @@ def index(request):
     user = request.user
     conversations = Conversation.objects.filter(
         Q(buyer=user) | Q(seller=user)
-    ).order_by(
-        "-created_at"
-    )  # todo: update based on last message
+    ).order_by("-created_at")  # todo: update based on last message
     return render(request, "chats/inbox.html", {"conversations": conversations})
 
 
@@ -25,7 +23,9 @@ def chat(request, conversation_id):
     messages = Message.objects.filter(conversation=conversation)[0:10]
     reversed_messages = []
     if messages:
-        reversed_messages = reversed(messages) # reverse order to show newest messages at the bottom
+        reversed_messages = reversed(
+            messages
+        )  # reverse order to show newest messages at the bottom
         conversation.last_message = messages[0].content
         conversation.save()
     return render(

@@ -1,10 +1,10 @@
 import os
 import uuid
-from django.http import JsonResponse
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import user_passes_test
-from faker import Faker
 
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from faker import Faker
 from items.models import Category, Item
 from utils.constants import CATEGORIES, SEED_NUM
 from utils.functions import download_image_from_url

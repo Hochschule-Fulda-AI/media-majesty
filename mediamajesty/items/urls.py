@@ -1,10 +1,7 @@
 # urls.py
 from django.urls import path
 
-from . import views
-from . import search_view
-from . import approval_view
-from . import download_view
+from . import approval_view, download_view, search_view, views
 
 app_name = "items"
 

@@ -1,6 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
-
+from django.db import models
 from items.models import Item
 
 
@@ -34,5 +33,5 @@ class Message(models.Model):
     def __str__(self):
         return self.content
 
-    class Meta: # type: ignore
+    class Meta:  # type: ignore
         ordering = ("-created_at",)

@@ -92,3 +92,6 @@ db.sqlite3
 config
 mediamajesty/static
 mediamajesty/media
+
+# build process now uses requirements.in
+requirements.txt
