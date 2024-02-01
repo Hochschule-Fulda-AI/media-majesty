@@ -62,3 +62,11 @@ class UserFeedback(models.Model):
 
     def __str__(self):
         return f"Feedback for {self.item.name} by {self.user.username}"
+    
+
+class ItemReport(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.item.name} reported by {self.reported_by.username}"

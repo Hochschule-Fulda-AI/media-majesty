@@ -5,6 +5,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import ItemForm, FeedbackForm
 from .models import Category, Item, UserFeedback
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+from .models import Item, ItemReport
 
 
 def index(request):
@@ -127,3 +130,12 @@ def feedback_form(request, id):
 
 def thank_you_view(request):
     return render(request, "items/thank_you.html")
+
+
+@login_required
+def report_item(request, id):
+    item = get_object_or_404(Item, id=id)
+    report, created = ItemReport.objects.get_or_create(item=item, reported_by=request.user)
+
+    # Check if the item has been reported and pass the information to the template
+    return render(request, 'items/report_item.html', {'item_reported': created, 'item': item})

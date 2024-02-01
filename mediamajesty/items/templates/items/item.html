@@ -46,6 +46,12 @@
             </button>
             {% endif %}
         {% endif %}
+
+        {% if request.user != item.created_by %}
+        <a href="{% url 'items:report_item' item.id %}" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold mt-6 py-2 px-4 rounded-sm">
+            Report
+        </a>
+        {% endif %}
     </div>
 </div>
 
