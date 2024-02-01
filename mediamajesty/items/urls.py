@@ -2,6 +2,7 @@
 from django.urls import path
 
 from . import approval_view, download_view, search_view, views
+from .views import thank_you_view
 
 app_name = "items"
 
@@ -20,4 +21,6 @@ urlpatterns = [
         name="search_suggestion",
     ),
     path("download/<int:id>/", download_view.download, name="download"),
+    path("<int:id>/feedback/", views.feedback_form, name="feedback_form"),
+    path("feedback/thank_you/", thank_you_view, name="thank_you"),
 ]

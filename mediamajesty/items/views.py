@@ -2,8 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import ItemForm
-from .models import Category, Item
+from .forms import ItemForm, FeedbackForm
+from .models import Category, Item, UserFeedback
+from django.shortcuts import render, redirect
 
 
 def index(request):
@@ -104,3 +105,25 @@ def delete(request, id):
     item = get_object_or_404(Item, id=id, created_by=request.user)
     item.delete()
     return redirect("dashboard:index")
+
+
+def feedback_form(request, id):
+    item = get_object_or_404(Item, id=id)
+
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.cleaned_data["feedback"]
+            rating = form.cleaned_data["rating"]
+            UserFeedback.objects.create(
+                user=request.user, item=item, feedback=feedback, rating=rating
+            )
+            return redirect("items:thank_you")
+    else:
+        form = FeedbackForm()
+
+    return render(request, "items/feedback_form.html", {"form": form, "item": item})
+
+
+def thank_you_view(request):
+    return render(request, "items/thank_you.html")

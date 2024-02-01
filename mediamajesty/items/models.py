@@ -52,3 +52,13 @@ class Item(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UserFeedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
+    feedback = models.TextField()
+
+    def __str__(self):
+        return f"Feedback for {self.item.name} by {self.user.username}"

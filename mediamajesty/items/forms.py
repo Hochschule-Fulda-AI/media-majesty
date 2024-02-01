@@ -39,3 +39,10 @@ class ItemForm(forms.ModelForm):
                 attrs={"class": INPUT_CLASSES, "placeholder": "Thumbnail URL"},
             ),
         }
+
+
+class FeedbackForm(forms.Form):
+    feedback = forms.CharField(
+        label="Leave your feedback regarding your purchase", widget=forms.Textarea
+    )
+    rating = forms.IntegerField(label="Rating", min_value=1, max_value=5)

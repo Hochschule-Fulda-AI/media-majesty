@@ -1,0 +1,52 @@
+<!-- feedback_form.html -->
+{% extends 'core/base.html' %}
+
+{% block title %}Leave Feedback{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Feedback</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <h1 class="text-center mb-6 text-3xl font-bold">Leave Your Feedback</h1>
+
+    <form method="post" class="w-1/2 mx-auto text-xl" action="{% url 'items:feedback_form' id=item.id %}" id="feedbackForm">
+        {% csrf_token %}
+        <div class="p-10 my-6 mx-auto bg-gray-100 rounded-xl">
+            <div class="mb-8">
+                <label for="rating" class="inline-block mb-2">Rating</label><br>
+                <select id="rating" name="rating" class="w-full px-3 py-2 text-xl border rounded-md">
+                    <option value="5">Very Good</option>
+                    <option value="4">Good</option>
+                    <option value="3">Satisfied</option>
+                    <option value="2">Average</option>
+                    <option value="1">Not Satisfied</option>
+                </select>
+            </div>
+            <div class="mb-8">
+                <label for="feedback" class="inline-block mb-2">Leave your feedback</label><br>
+                <textarea id="feedback" name="feedback" rows="4" class="w-full px-3 py-2 text-xl border rounded-md" placeholder="Write your feedback here"></textarea>
+            </div>
+        </div>
+
+        <p class="text-center">
+            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold my-8 py-4 px-6 rounded-sm">
+                Submit Feedback
+            </button>
+        </p>
+    </form>
+
+    <script>
+        $('#feedbackForm').submit(function () {
+            window.location.href = "{% url 'items:thank_you' %}";
+            return false;
+        });
+    </script>
+</body>
+</html>
+{% endblock %}
