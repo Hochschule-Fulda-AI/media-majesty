@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import ItemForm, FeedbackForm
 from .models import Category, Item, UserFeedback
 from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.db.models import Avg
 
 
 def index(request):
@@ -49,8 +51,12 @@ def item(request, id):
     related_items = Item.objects.filter(
         category=item.category, is_sold=False, is_approved=True
     ).exclude(id=id)
+
+    feedbacks = UserFeedback.objects.filter(item=item)
+    average_rating = feedbacks.aggregate(avg_rating=Avg('rating'))['avg_rating']
+
     return render(
-        request, "items/item.html", {"item": item, "related_items": related_items}
+        request, "items/item.html", {"item": item, "related_items": related_items, "feedbacks": feedbacks, "average_rating": average_rating}
     )
 
 
@@ -106,19 +112,21 @@ def delete(request, id):
     item.delete()
     return redirect("dashboard:index")
 
-
+@login_required
 def feedback_form(request, id):
     item = get_object_or_404(Item, id=id)
 
     if request.method == "POST":
         form = FeedbackForm(request.POST)
         if form.is_valid():
-            feedback = form.cleaned_data["feedback"]
+            feedback_text = form.cleaned_data["feedback"]
             rating = form.cleaned_data["rating"]
+
             UserFeedback.objects.create(
-                user=request.user, item=item, feedback=feedback, rating=rating
+                user=request.user, item=item, feedback=feedback_text, rating=rating
             )
-            return redirect("items:thank_you")
+
+            return redirect(reverse('items:thank_you'))
     else:
         form = FeedbackForm()
 

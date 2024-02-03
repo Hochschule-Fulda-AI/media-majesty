@@ -1,46 +1,28 @@
-<!-- feedback_form.html -->
 {% extends 'core/base.html' %}
 
 {% block title %}Leave Feedback{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leave Feedback</title>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-</head>
-<body>
-    <h1 class="text-center mb-6 text-3xl font-bold">Leave Your Feedback</h1>
 
-    <form method="post" class="w-1/2 mx-auto text-xl" action="{% url 'items:feedback_form' id=item.id %}" id="feedbackForm">
+<div class="container mx-auto mt-8">
+    <h2 class="text-2xl font-bold mb-6 text-center">Give us a review regarding your purchase {{ item.name }}</h2>
+
+    <form method="post" action="{% url 'items:feedback_form' item.id %}" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
         {% csrf_token %}
-        <div class="p-10 my-6 mx-auto bg-gray-100 rounded-xl">
-            <div class="mb-8">
-                <label for="rating" class="inline-block mb-2">Rating</label><br>
-                <select id="rating" name="rating" class="w-full px-3 py-2 text-xl border rounded-md">
-                    <option value="5">Very Good</option>
-                    <option value="4">Good</option>
-                    <option value="3">Satisfied</option>
-                    <option value="2">Average</option>
-                    <option value="1">Not Satisfied</option>
-                </select>
-            </div>
-            <div class="mb-8">
-                <label for="feedback" class="inline-block mb-2">Leave your feedback</label><br>
-                <textarea id="feedback" name="feedback" rows="4" class="w-full px-3 py-2 text-xl border rounded-md" placeholder="Write your feedback here"></textarea>
-            </div>
+        
+        <div class="mb-6">
+            <label for="id_feedback" class="block text-lg font-medium text-gray-600 mb-2">Feedback</label>
+            <textarea id="id_feedback" name="feedback" class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500" rows="4" required></textarea>
         </div>
 
-        <p class="text-center">
-            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold my-8 py-4 px-6 rounded-sm">
-                Submit Feedback
-            </button>
-        </p>
-    </form>
+        <div class="mb-6">
+            <label for="id_rating" class="block text-lg font-medium text-gray-600 mb-2">Rating</label>
+            <input type="number" id="id_rating" name="rating" class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500" min="1" max="5" required>
+        </div>
 
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Feedback</button>
+    </form>
+</div>
     <script>
         $('#feedbackForm').submit(function () {
             window.location.href = "{% url 'items:thank_you' %}";
