@@ -40,3 +40,19 @@ def signup(request):
 def logout(request):
     auth_logout(request)
     return redirect("/")
+
+
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        return redirect('core:confirm_email', email=email)
+    return render(request, "core/forgot_password.html")
+
+def confirm_email(request, email):
+    if request.method == "POST":
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+        return redirect('core:login')
+
+    return render(request, "core/confirm_email.html", {'email': email})
