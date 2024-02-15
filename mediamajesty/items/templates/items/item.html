@@ -71,16 +71,48 @@
 <div class="mt-6 px-12 py-12 bg-gray-100 rounded-sm">
     <h2 class="mb-6 text-2xl text-center">Product Reviews</h2>
     {% if feedbacks %}
-        <div class="grid grid-cols-3 gap-6">
-            {% for feedback in feedbacks %}
-                <div class="bg-white p-4 rounded-md shadow-md">
-                    <p class="text-lg font-semibold mb-2"><strong>{{ feedback.user.username }}</strong></p>
-                    <p class="text-md mb-2">Rating: {{ feedback.rating }}</p>
-                    <p class="text-gray-700">{{ feedback.feedback }}</p>
-                </div>
-            {% endfor %}
-        </div>
-        <p class="text-center mt-4 text-xl font-semibold">Average Rating: {{ average_rating }}</p>
+    <div class="grid grid-cols-3 gap-6">
+        {% for feedback in feedbacks %}
+            <div class="bg-white p-4 rounded-md shadow-md">
+                <p class="text-lg font-semibold mb-2"><strong>{{ feedback.user.username }}</strong></p>
+                <p class="text-md mb-2">Rating:
+                    {% if feedback.rating == 1 %}
+                        <span style="color: #FFD700;">★</span>
+                        <span style="color: #DDD;">☆☆☆☆</span>
+                    {% elif feedback.rating == 2 %}
+                        <span style="color: #FFD700;">★★</span>
+                        <span style="color: #DDD;">☆☆</span>
+                    {% elif feedback.rating == 3 %}
+                        <span style="color: #FFD700;">★★★</span>
+                        <span style="color: #DDD;">☆</span>
+                    {% elif feedback.rating == 4 %}
+                        <span style="color: #FFD700;">★★★★</span>
+                        <span style="color: #DDD;">☆</span>
+                    {% elif feedback.rating == 5 %}
+                        <span style="color: #FFD700;">★★★★★</span>
+                    {% endif %}
+                </p>
+                <p class="text-gray-700">{{ feedback.feedback }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    <p class="text-center mt-4 text-xl font-semibold">Average Rating:
+        {% if average_rating == 1 %}
+            <span style="color: #FFD700;">★</span>
+            <span style="color: #DDD;">☆☆☆☆</span>
+        {% elif average_rating == 2 %}
+            <span style="color: #FFD700;">★★</span>
+            <span style="color: #DDD;">☆☆</span>
+        {% elif average_rating == 3 %}
+            <span style="color: #FFD700;">★★★</span>
+            <span style="color: #DDD;">☆</span>
+        {% elif average_rating == 4 %}
+            <span style="color: #FFD700;">★★★★</span>
+            <span style="color: #DDD;">☆</span>
+        {% elif average_rating == 5 %}
+            <span style="color: #FFD700;">★★★★★</span>
+        {% endif %}
+    </p>
     {% else %}
         <p class="text-center text-gray-700">No feedback available for this item.</p>
     {% endif %}
