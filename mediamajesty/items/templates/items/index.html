@@ -84,7 +84,19 @@
         applyPrice.on("click", function () {
             const minPriceValue = minPrice.val();
             const maxPriceValue = maxPrice.val();
-            window.location.href = "{% url 'items:index' %}?min_price=" + minPriceValue + "&max_price=" + maxPriceValue;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+
+            let newUrl = "{% url 'items:index' %}?";
+
+            if (categoryParam) {
+                newUrl += "category=" + categoryParam + "&";
+            }
+
+            newUrl += "min_price=" + minPriceValue + "&max_price=" + maxPriceValue;
+
+            window.location.href = newUrl;
         });
 
         suggestionsContainer.hide();
