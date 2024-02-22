@@ -82,12 +82,14 @@ You need to have these things set up
 3. Install all python dependencies needed for the project
 
     ##### Installing dependencies
-    this is now a platform specific process to ensure cross-platform compatibility
+    This is now a platform specific process to ensure cross-platform
+    compatibility. It automatically installs, removes and keeps in sync the
+    virtual environment with requirements.txt file
 
     ```bash
     pip install pip-tools
     pip-compile requirements.in
-    pip install -r requirements.txt
+    pip-sync # synchronize virtual environment with requirements.txt
     ```
 
 4. Create the necessary environment file to run the project
