@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from storages.backends.azure_storage import AzureStorage
 from utils.constants import ACCEPTED_FILE_EXTENSIONS, ACCEPTED_FILE_MIME_TYPES
 
 extension_validator = FileExtensionValidator(ACCEPTED_FILE_EXTENSIONS)
@@ -16,6 +17,12 @@ def validate_file_mime_type(file):
             f"File type {file_mime_type} is not supported. "
             f"Supported file types are {ACCEPTED_FILE_EXTENSIONS}"
         )
+
+
+# set the storage for thumbnails
+class ThumbnailAzureStorage(AzureStorage):
+    azure_container = "thumbnails-container"
+    location = "thumbnails-resized"
 
 
 class Category(models.Model):
@@ -40,6 +47,7 @@ class Item(models.Model):
         upload_to="uploads/",
         default=None,
         validators=[extension_validator, validate_file_mime_type],
+        storage=AzureStorage(),
     )
     price = models.FloatField()
     thumbnail_url = models.URLField(blank=True, null=True)

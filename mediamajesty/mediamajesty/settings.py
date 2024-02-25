@@ -149,8 +149,11 @@ JAZZMIN_SETTINGS = {
 }
 
 
-# Use AzureBlobStorage for storing static files.
+# configurations for  default storage
 DEFAULT_FILE_STORAGE = str(os.getenv("DEFAULT_FILE_STORAGE"))
 AZURE_ACCOUNT_NAME = str(os.getenv("AZURE_ACCOUNT_NAME"))
 AZURE_ACCOUNT_KEY = str(os.getenv("AZURE_ACCOUNT_KEY"))
 AZURE_CONTAINER = str(os.getenv("AZURE_CONTAINER"))
+
+# configurations for thumbnail storage
+THUMBNAIL_AZURE_CONTAINER = str(os.getenv("THUMBNAIL_AZURE_CONTAINER"))

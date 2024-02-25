@@ -3,7 +3,8 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ItemForm
-from .models import Category, Item
+from .models import Category, Item, ThumbnailAzureStorage
+from .thumbnail_views import generate_thumbnail_url
 
 
 def index(request):
@@ -61,6 +62,8 @@ def add(request):
             item = form.save(commit=False)
             item.created_by = request.user
             item.save()
+            item.thumbnail_url = generate_thumbnail_url(item, ThumbnailAzureStorage())
+            item.save()
             return redirect("items:item", id=item.id)
     else:
         form = ItemForm()
@@ -85,6 +88,8 @@ def edit(request, id):
         if form.is_valid():
             form.instance.is_approved = False
             form.save()
+            item.thumbnail_url = generate_thumbnail_url(item, ThumbnailAzureStorage())
+            item.save()
             return redirect("items:item", id=id)
     else:
         form = ItemForm(instance=item)
