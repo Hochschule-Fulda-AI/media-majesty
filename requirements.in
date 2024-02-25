@@ -5,6 +5,7 @@ django-storages[azure]
 django-stubs
 faker
 mysqlclient
+pillow
 pip-tools
 pre-commit
 python-dotenv
