@@ -6,6 +6,8 @@ from django.db import models
 from storages.backends.azure_storage import AzureStorage
 from utils.constants import ACCEPTED_FILE_EXTENSIONS, ACCEPTED_FILE_MIME_TYPES
 
+from mediamajesty.settings import THUMBNAIL_AZURE_CONTAINER
+
 extension_validator = FileExtensionValidator(ACCEPTED_FILE_EXTENSIONS)
 
 
@@ -21,7 +23,7 @@ def validate_file_mime_type(file):
 
 # set the storage for thumbnails
 class ThumbnailAzureStorage(AzureStorage):
-    azure_container = "thumbnails-container"
+    azure_container = THUMBNAIL_AZURE_CONTAINER
     location = "thumbnails-resized"
 
 
