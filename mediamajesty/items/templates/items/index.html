@@ -4,14 +4,16 @@
 
 {% block content %}
 <div class="container mx-auto mt-8">
-    <form action="{% url 'items:index' %}" class="w-full mb-10 flex items-center" autocomplete="off">
-        <input type="text" name="search" id="searchInput" placeholder="Search"
-            class="py-4 px-6 border w-full rounded-l-md" value="{{ search }}">
-    </form>
-
-    <div id="suggestionsContainer" class="w-full mb-4">
-        <ul id="suggestionsList" class="list-none p-2 bg-white shadow-md rounded-md"></ul>
-    </div>
+        <form action="{% url 'items:index' %}" class="w-full mb-2 flex items-center" autocomplete="off">
+            <input type="text" name="search" id="searchInput" placeholder="Search"
+                class="py-4 px-6 border w-full rounded-l-md" value="{{ search }}">
+                <a id="voiceSearchBtn" href="#" class="py-4 px-2 bg-green-500 hover:bg-green-600 rounded-r-md text-white font-medium">
+                    <i class="fa fa-microphone"></i>
+                </a>
+        </form>
+        <div id="suggestionsContainer" class="w-full mb-4">
+            <ul id="suggestionsList" class="list-none p-2 bg-white shadow-md rounded-md"></ul>
+        </div>
 
     <div class="pb-6 grid grid-cols-4 gap-10">
         <div class="col-span-1 bg-gray-100 p-6 rounded-md">
@@ -72,7 +74,9 @@
 {% endblock %}
 
 {% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script>
     $(document).ready(function () {
         const searchInput = $("#searchInput");
@@ -80,6 +84,7 @@
         const minPrice = $("#min_price");
         const maxPrice = $("#max_price");
         const applyPrice = $("#apply-price");
+               const voiceSearchBtn = $("#voiceSearchBtn");
 
         applyPrice.on("click", function () {
             const minPriceValue = minPrice.val();
@@ -147,6 +152,19 @@
                 suggestionsContainer.hide();
             }
         });
+
+        voiceSearchBtn.on("click", function () {
+            event.preventDefault();
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = "en-US";
+            recognition.onresult = function (event) {
+                const result = event.results[0][0].transcript;
+                searchInput.val(result);
+                searchInput.trigger("input");
+            };
+            recognition.start();
+        });
+
     });
 </script>
 {% endblock %}
