@@ -2,8 +2,11 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from items.models import Category, Item
-
+from django.contrib.auth.models import User
+from django.contrib import messages
 from .forms import SignUpForm
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 
 def index(request):
@@ -48,11 +51,31 @@ def forgot_password(request):
         return redirect('core:confirm_email', email=email)
     return render(request, "core/forgot_password.html")
 
+
 def confirm_email(request, email):
     if request.method == "POST":
-        old_password = request.POST.get('old_password')
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
-        return redirect('core:login')
+
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+        else:
+            try:
+                user = User.objects.get(email=email)
+                if len(new_password) < 8:
+                    messages.error(request, "Password is too short. It must contain at least 8 characters.")
+                elif new_password.isdigit():
+                    messages.error(request, "Password cannot be entirely numeric.")
+                else:
+                    try:
+                        validate_password(new_password, user=user)
+                    except DjangoValidationError as e:
+                        messages.error(request, e.messages[0])
+                    else:
+                        user.set_password(new_password)
+                        user.save()
+                        messages.success(request, "Password reset successful. You can log in now.")
+            except User.DoesNotExist:
+                messages.error(request, "User with this email does not exist.")
 
     return render(request, "core/confirm_email.html", {'email': email})
