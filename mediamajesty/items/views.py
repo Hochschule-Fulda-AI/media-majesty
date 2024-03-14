@@ -109,7 +109,7 @@ def delete(request, id):
     item.delete()
     return redirect("dashboard:index")
 
-
+@login_required
 def feedback_form(request, id):
     item = get_object_or_404(Item, id=id)
 
