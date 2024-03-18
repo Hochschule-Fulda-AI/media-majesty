@@ -102,15 +102,17 @@ You need to have these things set up
     the names are the same as given below:
 
     ```python
+    SECRET_KEY="<secret key>"
+    DEBUG="<True or False depending on if you are in development or production>"
+    DATABASE_ENGINE="django.db.backends.mysql"
     DATABASE_NAME="<database name>"
     DATABASE_USER="<database user>"
     DATABASE_PASSWORD="<database password>"
     DATABASE_HOST="<localhost or remote host domain if you are hosting one>"
     DATABASE_PORT="<since we are using mysql, it is generally 3306>"
     DEFAULT_FILE_STORAGE="storages.backends.azure_storage.AzureStorage"
-    AZURE_ACCOUNT_NAME="<your azure credentials>"
-    AZURE_ACCOUNT_KEY="<your azure credentials>"
-    AZURE_CONTAINER="<your azure container name>"
+    AZURE_MEDIA_CONTAINER="<azure media container name>"
+    AZURE_THUMBNAIL_CONTAINER="<azure thumbnail container name>"
     ```
 
 > **Note**:

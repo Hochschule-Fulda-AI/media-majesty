@@ -1,10 +1,13 @@
 [project]
+name            = "media_majesty"
+description     = "A digital media marketplace"
+readme          = "README.md"
+license         = {file = "LICENSE"}
 requires-python = ">=3.10"
 
+[project.urls]
+Homepage = "https://github.com/Hochschule-Fulda-AI/media-majesty"
+
 [tool.ruff]
-# C4: flake-8 Comprehensions: https://docs.astral.sh/ruff/rules/#flake8-comprehensions-c4
-# I: flake-8 Isort: https://docs.astral.sh/ruff/rules/#isort-i
-# SIM: flake-8 Simplicity: https://docs.astral.sh/ruff/rules/#flake8-simplify-sim
-# TCH: flake-8 Type-checking: https://docs.astral.sh/ruff/rules/#flake8-type-checking-tch
 lint.extend-select = ["C4", "I", "SIM", "TCH"]
-lint.ignore = []
+lint.ignore        = []
