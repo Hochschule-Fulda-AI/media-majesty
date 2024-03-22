@@ -38,6 +38,7 @@ You need to have these things set up
 
 - `mysql` installed (ideally with a user other than root who has access to an empty database)
 - `ssh` key set up with github
+- `poetry` installed, check the [documentation](https://python-poetry.org/docs/)
 
 
 ### Steps to reproduce
@@ -62,34 +63,19 @@ You need to have these things set up
     python3 -m venv .venv           # creating virtual environment
     ```
 
-    ##### Activating virtual environment
-
-    ```python
-    # now activate the virtual environment;
-    source .venv/bin/activate       # on unix systems
-    source .venv/Scripts/activate   # on Windows (I mean why do you even use Windows really?)
-
-
-    # remember to activate your virtual environment
-    # every time you open the IDE if it doesn't do it
-    # for you automatically.
-
-    # to check if you have activated the virtual environment,
-    # you could run
-    which pip # it should point to the directory that you are in
-    ```
-
-3. Install all python dependencies needed for the project
+3. Install all python dependencies needed for the project using poetry
 
     ##### Installing dependencies
-    This is now a platform specific process to ensure cross-platform
-    compatibility. It automatically installs, removes and keeps in sync the
-    virtual environment with requirements.txt file
+    Poetry automatically installs and builds a lock file specific to your platform
 
     ```bash
-    pip install pip-tools
-    pip-compile requirements.in
-    pip-sync # synchronize virtual environment with requirements.txt
+    poetry install # installs all the dependencies into the virtual environment
+    ```
+
+    ##### Activating virtual environment
+
+    ```bash
+    poetry shell # activates the virtual environment
     ```
 
 4. Create the necessary environment file to run the project
@@ -102,15 +88,17 @@ You need to have these things set up
     the names are the same as given below:
 
     ```python
+    SECRET_KEY="<secret key>"
+    DEBUG="<True or False depending on if you are in development or production>"
+    DATABASE_ENGINE="django.db.backends.mysql"
     DATABASE_NAME="<database name>"
     DATABASE_USER="<database user>"
     DATABASE_PASSWORD="<database password>"
     DATABASE_HOST="<localhost or remote host domain if you are hosting one>"
     DATABASE_PORT="<since we are using mysql, it is generally 3306>"
     DEFAULT_FILE_STORAGE="storages.backends.azure_storage.AzureStorage"
-    AZURE_ACCOUNT_NAME="<your azure credentials>"
-    AZURE_ACCOUNT_KEY="<your azure credentials>"
-    AZURE_CONTAINER="<your azure container name>"
+    AZURE_MEDIA_CONTAINER="<azure media container name>"
+    AZURE_THUMBNAIL_CONTAINER="<azure thumbnail container name>"
     ```
 
 > **Note**:
@@ -134,8 +122,14 @@ You need to have these things set up
     python manage.py runserver
     ```
 
+
     And _Voila!_ Hopefully everything must have went well and you should see the
     development server running.
+
+> **Note**:
+> These `manage.py` commands will only work if you are inside poetry's virtual
+> environment which you should have activated from the previous step hopefully.
+
 
 6. One final note, install pre-commit:
 
@@ -157,9 +151,7 @@ You need to have these things set up
 > **Note**
 > Please always make sure the [virtual environment is
 > activated](#activating-virtual-environment) before you start working on the
-> project. It gets messy if you install all the dependencies outside the
-> virtual environment and can cause problems later with the Operating System
-> python packages.
+> project. Use `poetry` to manage and install dependencies.
 
 > Also, make sure that in case of breaking changes that require additional
 > dependencies or database updates, you [install the new
