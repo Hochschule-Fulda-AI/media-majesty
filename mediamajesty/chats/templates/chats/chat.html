@@ -31,8 +31,11 @@
             {% csrf_token %}
             <input type="text" name="content" class="flex-1 mr-3 p-4 border rounded-md" placeholder="Your message..."
                 id="chat-message-input">
-            <button type="submit" class="px-5 py-3 rounded-md text-white bg-teal-600 hover:bg-teal-700">Send</button>
+            <button id="chat-message-submit" type="submit"
+                class="px-5 py-3 rounded-md text-white bg-teal-600 hover:bg-teal-700">Send</button>
         </form>
+        {{ conversation.id|json_script:"roomname" }}
+        {{ user.username|json_script:"username" }}
     </div>
 </div>
 {% endblock %}

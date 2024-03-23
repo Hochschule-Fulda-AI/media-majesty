@@ -22,7 +22,8 @@
                         </path>
                     </svg>
                 </button>
-                <div id="menu" class="hidden md:hidden absolute bg-white right-0 mt-2 py-2 w-48 border rounded-md shadow-lg">
+                <div id="menu"
+                    class="hidden md:hidden absolute bg-white right-0 mt-2 py-2 w-48 border rounded-md shadow-lg">
                     {% if request.user.is_authenticated %}
                     {% if request.user.is_superuser %}
                     <a href="{% url 'items:pending_items' %}"
@@ -34,8 +35,8 @@
                     <a href="{% url 'seed:items' %}"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Seed Items</a>
                     {% else %}
-                    <a href="{% url 'items:add' %}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Add Item</a>
+                    <a href="{% url 'items:add' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Add
+                        Item</a>
                     <a href="{% url 'dashboard:index' %}"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
                     {% endif %}
@@ -54,8 +55,8 @@
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Search Item</a>
                     <a href="{% url 'core:signup' %}"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign up</a>
-                    <a href="{% url 'core:login' %}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log in</a>
+                    <a href="{% url 'core:login' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log
+                        in</a>
                     {% endif %}
                 </div>
             </div>
@@ -130,6 +131,9 @@
             document.getElementById('menu').classList.toggle('hidden');
         });
     </script>
+
+    {% block scripts %}
+    {% endblock %}
 </body>
 
 </html>
