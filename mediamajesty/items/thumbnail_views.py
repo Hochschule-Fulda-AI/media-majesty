@@ -5,6 +5,16 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 from PIL import Image, ImageDraw, ImageFont
 
+from moviepy.editor import VideoFileClip
+from django.conf import settings
+from urllib.parse import urlparse
+from django.core.files.storage import default_storage
+import tempfile
+from moviepy.editor import concatenate_audioclips
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import Item, ThumbnailAzureStorage
+
 
 def generate_thumbnail_url(item_instance, thumbnail_storage):
     media_file_type = mimetypes.guess_type(item_instance.media_file.name)[
@@ -25,7 +35,8 @@ def generate_thumbnail_url(item_instance, thumbnail_storage):
         # generate a thumbnail URL for an item based on the file type
         return thumbnail_storage.url(thumbnail_name)
     elif media_file_type.startswith("video"):
-        return "https://mediamajestystorage.blob.core.windows.net/thumbnails-container/thumbnails-default/default-video-thumbnail.png"
+        return generate_video_thumbnail(item_instance, thumbnail_storage)
+        #return "https://mediamajestystorage.blob.core.windows.net/thumbnails-container/thumbnails-default/default-video-thumbnail.png"
     elif media_file_type.startswith("audio"):
         return "https://mediamajestystorage.blob.core.windows.net/thumbnails-container/thumbnails-default/default-audio-thumbnail.png"
     else:
@@ -78,3 +89,50 @@ def addWatermark(item_instance):
     watermarked_image = Image.alpha_composite(watermarked_image, overlay)
     # in-memory byte buffer to store the content of the image
     return watermarked_image
+
+
+
+
+@receiver(post_save, sender=Item)
+def generate_thumbnail(sender, instance, created, **kwargs):
+    #if created and instance.media_file.name.endswith('.mp4'):  
+    if created:  
+        # Only generate thumbnail for newly created items with .mp4 files
+        thumbnail_url = generate_thumbnail_url(instance, ThumbnailAzureStorage())
+        instance.thumbnail_url = thumbnail_url
+        instance.save()
+
+
+
+
+def generate_video_thumbnail(item_instance, thumbnail_storage):
+    # Download the file content and store it in a temporary file
+    with default_storage.open(item_instance.media_file.name, 'rb') as file:
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(file.read())
+            temp_file_path = temp_file.name
+    try:
+        # Load the video clip
+        video_clip = VideoFileClip(temp_file_path)
+        # Calculate the duration of the video clip
+        duration = video_clip.duration
+        # Calculate the time for the thumbnail (10% of the duration)
+        thumbnail_time = duration * 0.2
+        # Crop the video clip
+        subclip_start = 0  # Start from the beginning
+        cropped_clip = video_clip.subclip(subclip_start, thumbnail_time)
+        # Generate a unique thumbnail name
+        thumbnail_name = f"{item_instance.media_file.name.split('/')[-1]}_thumbnail.mp4"
+        # Write the cropped video file
+        cropped_clip.write_videofile(thumbnail_name, remove_temp=True, codec="libx264", audio_codec="aac")
+        # Save the thumbnail to storage
+        thumbnail_storage.save(thumbnail_name, ContentFile(open(thumbnail_name, "rb").read()))
+        # Return the URL of the thumbnail
+        #print("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW" + thumbnail_storage.url(thumbnail_name))
+        return thumbnail_storage.url(thumbnail_name)
+    finally:
+        # Ensure the temporary file is deleted, even if an exception occurs
+        os.unlink(temp_file_path)
+        print("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW" + temp_file_path)
+
+        #os.remove(temp_file_path)
