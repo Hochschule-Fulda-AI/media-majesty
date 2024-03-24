@@ -9,7 +9,6 @@
     - integrating tailwind component libraries (eg: daisy UI)
 - pagination of results
 - front end mime type validation (saves network requests; better UX)
-- asynchronous file uploads & downloads (better UX)
 - notification system
 - video-previews
 - writing tests
