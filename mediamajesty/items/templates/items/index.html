@@ -55,7 +55,11 @@
                 <div>
                     <a href="{% url 'items:item' item.id %}">
                         <div>
-                            <img src="{{ item.thumbnail_url }}" class="rounded-t-xl" />
+                            {% if item.thumbnail_url|lower|slice:'-3:' == 'mp4' or item.thumbnail_url|lower|slice:'-3:' == 'mov' %}
+                                <img src="https://mediamajestystorage.blob.core.windows.net/thumbnails-container/thumbnails-default/default-video-thumbnail.png" class="rounded-t-xl" />
+                            {% else %}
+                                <img src="{{ item.thumbnail_url }}" class="rounded-t-xl" />
+                            {% endif %}
                         </div>
                         <div class="p-6 bg-white rounded-b-xl">
                             <h2 class="text-2xl mb-2">{{ item.name }}</h2>
