@@ -15,15 +15,15 @@ class MediaBlob:
         blob_client = blob_service_client.get_blob_client(
             container=container_name, blob=blob_name
         )
-        for chunks in file.chunks():
-            await blob_client.upload_blob(chunks, overwrite=True)
+        with file.open("rb") as file:
+            await blob_client.upload_blob(file, overwrite=True)
         return blob_name
 
     async def download_blob(self, blob_service_client, container_name, blob_name):
         blob_client = blob_service_client.get_blob_client(
             container=container_name, blob=blob_name
         )
-        download_stream = await blob_client.download_blob()
+        download_stream = await blob_client.download_blob(max_concurrency=2)
         blob = await download_stream.readall()
         return blob
 
