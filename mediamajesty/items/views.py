@@ -1,7 +1,10 @@
+import asyncio
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
+from .file_handler import delete_file, upload_file
 from .forms import ItemForm
 from .models import Category, Item
 
@@ -60,8 +63,12 @@ def add(request):
         if form.is_valid():
             item = form.save(commit=False)
             item.created_by = request.user
+            media_file = request.FILES["media_file"]
+            blob_name = asyncio.run(upload_file(media_file))
+            item.media_blob_name = blob_name
             item.save()
             return redirect("items:item", id=item.id)
+
     else:
         form = ItemForm()
 
@@ -84,6 +91,11 @@ def edit(request, id):
 
         if form.is_valid():
             form.instance.is_approved = False
+            if request.FILES["media_file"]:
+                media_file = request.FILES["media_file"]
+                asyncio.run(delete_file(form.instance.media_blob_name))
+                blob_name = asyncio.run(upload_file(media_file))
+                form.instance.media_blob_name = blob_name
             form.save()
             return redirect("items:item", id=id)
     else:
@@ -102,5 +114,6 @@ def edit(request, id):
 @login_required
 def delete(request, id):
     item = get_object_or_404(Item, id=id, created_by=request.user)
+    asyncio.run(delete_file(item.media_blob_name))
     item.delete()
     return redirect("dashboard:index")

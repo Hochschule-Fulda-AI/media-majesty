@@ -10,6 +10,10 @@ migrations:
 migrate:
 	poetry run python mediamajesty/manage.py migrate
 
+.PHONY: dbshell
+dbshell:
+	poetry run python mediamajesty/manage.py dbshell
+
 .PHONY: run
 run:
 	poetry run python mediamajesty/manage.py runserver
