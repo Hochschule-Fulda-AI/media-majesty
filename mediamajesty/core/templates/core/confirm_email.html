@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Confirm Email{% endblock %}
+
+{% block content %}
+<div class="w-1/2 my-6 p-6 mx-auto bg-gray-100 rounded-xl">
+    <h1 class="mb-8 text-3xl text-center">Confirm Email</h1>
+
+    {% if messages %}
+        <div class="mb-4" style="background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; padding: 10px; border-radius: 5px; text-align: center; font-size: 1.1rem;">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post" class="px-20 text-2xl" action="{% url 'core:confirm_email' email=email %}">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            <label for="new_password" class="inline-block mb-2">New Password</label><br>
+            <input type="password" name="new_password" required
+                class="w-full p-2 my-2 border border-gray-300 rounded-sm">
+        </div>
+
+        <div class="mb-4">
+            <label for="confirm_password" class="inline-block mb-2">Confirm Password</label><br>
+            <input type="password" name="confirm_password" required
+                class="w-full p-2 my-2 border border-gray-300 rounded-sm">
+        </div>
+
+        <p class="text-center">
+            <button type="submit"
+                class="py-4 px-6 my-4 text-lg font-semibold bg-teal-500 hover:bg-teal-700 rounded-sm text-white">Reset
+                Password</button>
+        </p>
+    </form>
+</div>
+{% endblock %}

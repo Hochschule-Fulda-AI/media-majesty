@@ -3,6 +3,8 @@ from django.urls import path
 
 from . import views
 from .forms import LoginForm
+from django.urls import path
+
 
 app_name = "core"
 
@@ -19,4 +21,7 @@ urlpatterns = [
         name="login",
     ),
     path("logout/", views.logout, name="logout"),
+    path("forgot-password/", views.forgot_password, name="forgot_password"),
+    path("confirm-email/<str:email>/", views.confirm_email, name="confirm_email"),
+    
 ]

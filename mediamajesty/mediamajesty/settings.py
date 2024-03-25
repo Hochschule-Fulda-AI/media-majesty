@@ -8,24 +8,14 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-ph-%&(rz9%s+ylwtgz5f7(b22jr+^gfi0$*^(x_hg*g9@oyk&x"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-
-# Application definition
-
 
 INSTALLED_APPS = [
     "daphne",
@@ -77,29 +67,22 @@ ASGI_APPLICATION = "mediamajesty.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
-        # testing only
+        # WARN: development only
         # migrate to redis in production
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": str(os.getenv("DATABASE_NAME")),
-        "USER": str(os.getenv("DATABASE_USER")),
-        "PASSWORD": str(os.getenv("DATABASE_PASSWORD")),
-        "HOST": str(os.getenv("DATABASE_HOST")),
-        "PORT": str(os.getenv("DATABASE_PORT")),
+        "ENGINE": os.getenv("DATABASE_ENGINE"),
+        "NAME": os.getenv("DATABASE_NAME"),
+        "USER": os.getenv("DATABASE_USER"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+        "HOST": os.getenv("DATABASE_HOST"),
+        "PORT": os.getenv("DATABASE_PORT"),
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -116,30 +99,33 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Europe/Berlin"
 USE_I18N = True
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+STORAGES = {
+    "default": {
+        "BACKEND": os.getenv("DEFAULT_FILE_STORAGE"),
+        "OPTIONS": {
+            "connection_string": os.getenv("AZURE_CONNECTION_STRING"),
+            "azure_container": os.getenv("AZURE_MEDIA_CONTAINER"),
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Admin dashboard customization
 JAZZMIN_SETTINGS = {
     "site_title": "Media Majesty",
     "site_header": "Media Majesty",
@@ -148,10 +134,3 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Welcome to Media Majesty Admin Dashboard!",
     "copyright": "Media Majesty",
 }
-
-
-# Use AzureBlobStorage for storing static files.
-DEFAULT_FILE_STORAGE = str(os.getenv("DEFAULT_FILE_STORAGE"))
-AZURE_ACCOUNT_NAME = str(os.getenv("AZURE_ACCOUNT_NAME"))
-AZURE_ACCOUNT_KEY = str(os.getenv("AZURE_ACCOUNT_KEY"))
-AZURE_CONTAINER = str(os.getenv("AZURE_CONTAINER"))
