@@ -64,6 +64,6 @@ class ItemForm(forms.ModelForm):
 
 class FeedbackForm(forms.Form):
     feedback = forms.CharField(
-        label="Leave your feedback regarding your purchase", widget=forms.Textarea
+        label="Leave a feedback regarding your purchase", widget=forms.Textarea
     )
     rating = forms.IntegerField(label="Rating", min_value=1, max_value=5)

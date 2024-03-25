@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from .file_handler import delete_file, upload_file
 from .forms import FeedbackForm, ItemForm
-from .models import Category, Item, UserFeedback
+from .models import Category, Item, ItemFeedback
 
 
 def index(request):
@@ -53,7 +53,7 @@ def item(request, id):
         category=item.category, is_sold=False, is_approved=True
     ).exclude(id=id)
 
-    feedbacks = UserFeedback.objects.filter(item=item)
+    feedbacks = ItemFeedback.objects.filter(item=item)
     average_rating = feedbacks.aggregate(avg_rating=Avg("rating"))["avg_rating"]
 
     return render(
@@ -139,7 +139,7 @@ def feedback_form(request, id):
         if form.is_valid():
             feedback_text = form.cleaned_data["feedback"]
             rating = form.cleaned_data["rating"]
-            UserFeedback.objects.create(
+            ItemFeedback.objects.create(
                 user=request.user, item=item, feedback=feedback_text, rating=rating
             )
             return redirect(reverse("items:thank_you"))
