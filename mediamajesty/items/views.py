@@ -1,13 +1,13 @@
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect, render
+import asyncio
 
-from .forms import ItemForm, FeedbackForm
-from .models import Category, Item, UserFeedback
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Avg, Q
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Item, ItemReport
+from django.urls import reverse
+
+from .file_handler import delete_file, upload_file
+from .forms import FeedbackForm, ItemForm
+from .models import Category, Item, ItemFeedback, ItemReport
 
 
 def index(request):
@@ -52,8 +52,20 @@ def item(request, id):
     related_items = Item.objects.filter(
         category=item.category, is_sold=False, is_approved=True
     ).exclude(id=id)
+
+    feedbacks = ItemFeedback.objects.filter(item=item)
+    average_rating = feedbacks.aggregate(avg_rating=Avg("rating"))["avg_rating"]
+    average_rating = int(average_rating) if average_rating is not None else 0
+
     return render(
-        request, "items/item.html", {"item": item, "related_items": related_items}
+        request,
+        "items/item.html",
+        {
+            "item": item,
+            "related_items": related_items,
+            "feedbacks": feedbacks,
+            "average_rating": average_rating,
+        },
     )
 
 
@@ -64,8 +76,12 @@ def add(request):
         if form.is_valid():
             item = form.save(commit=False)
             item.created_by = request.user
+            media_file = request.FILES["media_file"]
+            blob_name = asyncio.run(upload_file(media_file))
+            item.media_blob_name = blob_name
             item.save()
             return redirect("items:item", id=item.id)
+
     else:
         form = ItemForm()
 
@@ -88,6 +104,11 @@ def edit(request, id):
 
         if form.is_valid():
             form.instance.is_approved = False
+            if request.FILES["media_file"]:
+                media_file = request.FILES["media_file"]
+                asyncio.run(delete_file(form.instance.media_blob_name))
+                blob_name = asyncio.run(upload_file(media_file))
+                form.instance.media_blob_name = blob_name
             form.save()
             return redirect("items:item", id=id)
     else:
@@ -106,28 +127,29 @@ def edit(request, id):
 @login_required
 def delete(request, id):
     item = get_object_or_404(Item, id=id, created_by=request.user)
+    asyncio.run(delete_file(item.media_blob_name))
     item.delete()
     return redirect("dashboard:index")
 
 
+@login_required
 def feedback_form(request, id):
     item = get_object_or_404(Item, id=id)
-
     if request.method == "POST":
         form = FeedbackForm(request.POST)
         if form.is_valid():
-            feedback = form.cleaned_data["feedback"]
+            feedback_text = form.cleaned_data["feedback"]
             rating = form.cleaned_data["rating"]
-            UserFeedback.objects.create(
-                user=request.user, item=item, feedback=feedback, rating=rating
+            ItemFeedback.objects.create(
+                user=request.user, item=item, feedback=feedback_text, rating=rating
             )
-            return redirect("items:thank_you")
+            return redirect(reverse("items:thank_you"))
     else:
         form = FeedbackForm()
-
     return render(request, "items/feedback_form.html", {"form": form, "item": item})
 
 
+@login_required
 def thank_you_view(request):
     return render(request, "items/thank_you.html")
 
@@ -135,7 +157,10 @@ def thank_you_view(request):
 @login_required
 def report_item(request, id):
     item = get_object_or_404(Item, id=id)
-    report, created = ItemReport.objects.get_or_create(item=item, reported_by=request.user)
+    report, created = ItemReport.objects.get_or_create(
+        item=item, reported_by=request.user
+    )
 
-    # Check if the item has been reported and pass the information to the template
-    return render(request, 'items/report_item.html', {'item_reported': created, 'item': item})
+    return render(
+        request, "items/report_item.html", {"item_reported": created, "item": item}
+    )
