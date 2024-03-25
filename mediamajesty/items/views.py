@@ -1,12 +1,13 @@
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect, render
+import asyncio
 
-from .forms import ItemForm, FeedbackForm
-from .models import Category, Item, UserFeedback
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.db.models import Avg, Q
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.db.models import Avg
+
+from .file_handler import delete_file, upload_file
+from .forms import FeedbackForm, ItemForm
+from .models import Category, Item, UserFeedback
 
 
 def index(request):
@@ -53,10 +54,17 @@ def item(request, id):
     ).exclude(id=id)
 
     feedbacks = UserFeedback.objects.filter(item=item)
-    average_rating = feedbacks.aggregate(avg_rating=Avg('rating'))['avg_rating']
+    average_rating = feedbacks.aggregate(avg_rating=Avg("rating"))["avg_rating"]
 
     return render(
-        request, "items/item.html", {"item": item, "related_items": related_items, "feedbacks": feedbacks, "average_rating": average_rating}
+        request,
+        "items/item.html",
+        {
+            "item": item,
+            "related_items": related_items,
+            "feedbacks": feedbacks,
+            "average_rating": average_rating,
+        },
     )
 
 
@@ -67,8 +75,12 @@ def add(request):
         if form.is_valid():
             item = form.save(commit=False)
             item.created_by = request.user
+            media_file = request.FILES["media_file"]
+            blob_name = asyncio.run(upload_file(media_file))
+            item.media_blob_name = blob_name
             item.save()
             return redirect("items:item", id=item.id)
+
     else:
         form = ItemForm()
 
@@ -91,6 +103,11 @@ def edit(request, id):
 
         if form.is_valid():
             form.instance.is_approved = False
+            if request.FILES["media_file"]:
+                media_file = request.FILES["media_file"]
+                asyncio.run(delete_file(form.instance.media_blob_name))
+                blob_name = asyncio.run(upload_file(media_file))
+                form.instance.media_blob_name = blob_name
             form.save()
             return redirect("items:item", id=id)
     else:
@@ -109,29 +126,28 @@ def edit(request, id):
 @login_required
 def delete(request, id):
     item = get_object_or_404(Item, id=id, created_by=request.user)
+    asyncio.run(delete_file(item.media_blob_name))
     item.delete()
     return redirect("dashboard:index")
+
 
 @login_required
 def feedback_form(request, id):
     item = get_object_or_404(Item, id=id)
-
     if request.method == "POST":
         form = FeedbackForm(request.POST)
         if form.is_valid():
             feedback_text = form.cleaned_data["feedback"]
             rating = form.cleaned_data["rating"]
-
             UserFeedback.objects.create(
                 user=request.user, item=item, feedback=feedback_text, rating=rating
             )
-
-            return redirect(reverse('items:thank_you'))
+            return redirect(reverse("items:thank_you"))
     else:
         form = FeedbackForm()
-
     return render(request, "items/feedback_form.html", {"form": form, "item": item})
 
 
+@login_required
 def thank_you_view(request):
     return render(request, "items/thank_you.html")

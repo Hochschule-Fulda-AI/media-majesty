@@ -1,10 +1,11 @@
+import asyncio
 import os
-import uuid
 
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from faker import Faker
+from items.file_handler import upload_file
 from items.models import Category, Item
 from utils.constants import CATEGORIES, SEED_NUM
 from utils.functions import download_image_from_url
@@ -65,12 +66,10 @@ def items(_):
                 "thumbnail_url": thumbnail,
             },
         )
-        with open(media_file.name, "rb") as file:  # type: ignore
-            item.media_file.save(
-                uuid.uuid4().hex + "." + file.name.split(".")[-1],  # type: ignore
-                file,
-                save=True,
-            )
+        with media_file.open("rb") as file:  # type: ignore
+            blob_name = asyncio.run(upload_file(file))
+            item.media_blob_name = blob_name
+            item.save()
         media_file.close()  # type: ignore
         os.remove(media_file.name)  # type: ignore
         created_items.append(
