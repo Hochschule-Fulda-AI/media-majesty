@@ -55,6 +55,7 @@ def item(request, id):
 
     feedbacks = ItemFeedback.objects.filter(item=item)
     average_rating = feedbacks.aggregate(avg_rating=Avg("rating"))["avg_rating"]
+    average_rating = int(average_rating) if average_rating is not None else 0
 
     return render(
         request,
