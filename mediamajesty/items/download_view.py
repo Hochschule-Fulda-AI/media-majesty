@@ -8,6 +8,7 @@ from .file_handler import download_file
 from .models import Item
 
 
+# TODO: restrict this endpoint to users who purchased the item
 @login_required
 def download(_, id):
     item = get_object_or_404(Item, id=id)

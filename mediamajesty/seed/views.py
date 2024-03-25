@@ -51,7 +51,7 @@ def items(_):
     for _ in range(SEED_NUM):
         category = fake.random_element(Category.objects.all())
         user = fake.random_element(User.objects.all().exclude(is_staff=True))
-        name = fake.sentence(nb_words=3)
+        name = fake.sentence(nb_words=3).replace(".", "")
         description = fake.text()
         price = fake.pyint(min_value=0, max_value=50)
         thumbnail = f"https://picsum.photos/seed/{name}/1920/1080"

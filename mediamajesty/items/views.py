@@ -1,12 +1,13 @@
 import asyncio
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Avg, Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 from .file_handler import delete_file, upload_file
-from .forms import ItemForm
-from .models import Category, Item
+from .forms import FeedbackForm, ItemForm
+from .models import Category, Item, ItemFeedback
 
 
 def index(request):
@@ -51,8 +52,20 @@ def item(request, id):
     related_items = Item.objects.filter(
         category=item.category, is_sold=False, is_approved=True
     ).exclude(id=id)
+
+    feedbacks = ItemFeedback.objects.filter(item=item)
+    average_rating = feedbacks.aggregate(avg_rating=Avg("rating"))["avg_rating"]
+    average_rating = int(average_rating) if average_rating is not None else 0
+
     return render(
-        request, "items/item.html", {"item": item, "related_items": related_items}
+        request,
+        "items/item.html",
+        {
+            "item": item,
+            "related_items": related_items,
+            "feedbacks": feedbacks,
+            "average_rating": average_rating,
+        },
     )
 
 
@@ -117,3 +130,25 @@ def delete(request, id):
     asyncio.run(delete_file(item.media_blob_name))
     item.delete()
     return redirect("dashboard:index")
+
+
+@login_required
+def feedback_form(request, id):
+    item = get_object_or_404(Item, id=id)
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback_text = form.cleaned_data["feedback"]
+            rating = form.cleaned_data["rating"]
+            ItemFeedback.objects.create(
+                user=request.user, item=item, feedback=feedback_text, rating=rating
+            )
+            return redirect(reverse("items:thank_you"))
+    else:
+        form = FeedbackForm()
+    return render(request, "items/feedback_form.html", {"form": form, "item": item})
+
+
+@login_required
+def thank_you_view(request):
+    return render(request, "items/thank_you.html")
