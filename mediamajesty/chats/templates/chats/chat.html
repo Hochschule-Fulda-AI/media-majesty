@@ -5,17 +5,15 @@
 {% block content %}
 <div class="container mx-auto px-4 md:px-0">
 
-    <div class="p-4 bg-gray-100 rounded-lg">
-        <h2 class="text-2xl" id="conversation-item">{{ conversation.item }}</h2>
-    </div>
-
-    <div class="w-full lg:w-2/4 mx-auto mt-6 p-4 bg-gray-100 rounded-xl">
+    <div class="w-full lg:w-2/4 mx-auto mt-6 p-4 bg-gray-100 rounded-xl overflow-y-auto" style="max-height: 400px;">
         <div class="chat-messages space-y-3" id="chat-messages">
             {% if messages %}
             {% for m in messages %}
-            <p>
-                <b>{{ m.sender }}</b>: {{ m.content }}
-            </p>
+            <div class="{% if m.sender == request.user %} text-right {% else %} text-left {% endif %}">
+                <div class="inline-block rounded-lg p-2 {% if m.sender == request.user %} bg-blue-500 text-white {% else %} bg-gray-300 {% endif %}">
+                    <p><b>{{ m.sender }}</b>: {{ m.content }}</p>
+                </div>
+            </div>
             {% endfor %}
             {% else %}
             <p class="text-center" id="no-message-box">No messages sent to {{ partner }} yet...</p>
@@ -24,9 +22,6 @@
     </div>
 
     <div class="w-full lg:w-2/4 mx-auto mt-6 p-4 bg-white rounded-xl">
-        {% if request.user == conversation.buyer %}
-        <button class="w-full mb-4 px-4 py-3 rounded-lg text-white bg-blue-500 hover:bg-blue-700">Make an offer</button>
-        {% endif %}
         <form method="post" action="." class="flex" autocomplete="off">
             {% csrf_token %}
             <input type="text" name="content" class="flex-1 mr-3 p-4 border rounded-md" placeholder="Your message..."
@@ -61,13 +56,13 @@
         if (document.getElementById('no-message-box')) {
             document.getElementById('no-message-box').remove();
         }
-        if (chatMessages.children.length >= 10) {
-            chatMessages.removeChild(chatMessages.children[0]);
-        }
         const data = JSON.parse(e.data);
-        const messageElement = document.createElement('p');
-        messageElement.innerHTML = '<b>' + data['sender'] + '</b>: ' + data['message'];
+        const messageElement = document.createElement('div');
+        messageElement.className = data.sender === userName ? 'text-right' : 'text-left';
+        const bubbleColor = data.sender === userName ? 'bg-blue-500 text-white' : 'bg-gray-300';
+        messageElement.innerHTML = '<div class="inline-block rounded-lg p-2 ' + bubbleColor + '"><p><b>' + data['sender'] + '</b>: ' + data['message'] + '</p></div>';
         chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the bottom
     }
 
     chatSocket.onclose = (e) => {

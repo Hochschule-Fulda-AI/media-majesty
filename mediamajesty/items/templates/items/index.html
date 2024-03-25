@@ -159,16 +159,38 @@
 
         voiceSearchBtn.on("click", function () {
             event.preventDefault();
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = "en-US";
+            voiceSearchBtn.addClass('text-red-500');
+
+            if ('SpeechRecognition' in window) {
+                const recognition = new window.SpeechRecognition();
+                recognition.lang = "en-US";
+                startRecognition(recognition);
+            } else if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = "en-US";
+                startRecognition(recognition);
+            } else if ('mozSpeechRecognition' in window) {
+                const recognition = new mozSpeechRecognition();
+                recognition.lang = "en-US";
+                startRecognition(recognition);
+            } else {
+                alert("Voice search is not supported in your browser. Please use the manual search instead.");
+            }
+        });
+
+        function startRecognition(recognition) {
             recognition.onresult = function (event) {
                 const result = event.results[0][0].transcript;
                 searchInput.val(result);
                 searchInput.trigger("input");
             };
+            recognition.onend = function () {
+                voiceSearchBtn.removeClass('text-red-500');
+            };
             recognition.start();
-        });
+        }
 
     });
 </script>
+
 {% endblock %}
