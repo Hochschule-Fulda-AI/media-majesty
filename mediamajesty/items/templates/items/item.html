@@ -33,18 +33,24 @@
                 </a>
             </div>
             {% else %}
-            <div class="mt-6 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            <div class="mt-6 flex flex-col space-y-4 md:space-y-3 text-center">
                 <a href="{% url 'chats:new' item.id %}"
-                    class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-sm text-center">
+                    class="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-sm">
                     Contact Seller</a>
                 {% if item.price == 0.0 %}
                 <a href="{% url 'items:download' item.id %}"
-                    class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-sm text-center">
+                    class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-sm">
                     Download </a>
                 {% else %}
-                <button
-                    class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-sm text-center"
+                <button class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-sm"
                     id="purchaseBtn">Purchase</button>
+                {% endif %}
+
+                {% if request.user != item.created_by %}
+                <a href="{% url 'items:report_item' item.id %}"
+                    class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold mt-6 py-2 px-4 rounded-sm">
+                    Report
+                </a>
                 {% endif %}
             </div>
             {% endif %}
@@ -99,6 +105,7 @@
         {% else %}
         <p class="text-center text-gray-700">No feedback available for this item.</p>
         {% endif %}
+
     </div>
 
     <div class="mt-6 px-4 md:px-12 py-12 bg-gray-100 rounded-sm">

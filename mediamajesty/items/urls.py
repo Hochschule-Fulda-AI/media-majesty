@@ -23,4 +23,6 @@ urlpatterns = [
     path("download/<int:id>/", download_view.download, name="download"),
     path("<int:id>/feedback/", views.feedback_form, name="feedback_form"),
     path("feedback/thank_you/", thank_you_view, name="thank_you"),
+    path("<int:id>/report/", views.report_item, name="report_item"),
+
 ]

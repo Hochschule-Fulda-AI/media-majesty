@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from .file_handler import delete_file, upload_file
 from .forms import FeedbackForm, ItemForm
-from .models import Category, Item, ItemFeedback
+from .models import Category, Item, ItemFeedback, ItemReport
 
 
 def index(request):
@@ -152,3 +152,15 @@ def feedback_form(request, id):
 @login_required
 def thank_you_view(request):
     return render(request, "items/thank_you.html")
+
+
+@login_required
+def report_item(request, id):
+    item = get_object_or_404(Item, id=id)
+    report, created = ItemReport.objects.get_or_create(
+        item=item, reported_by=request.user
+    )
+
+    return render(
+        request, "items/report_item.html", {"item_reported": created, "item": item}
+    )

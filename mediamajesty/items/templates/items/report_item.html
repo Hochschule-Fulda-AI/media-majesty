@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Report Item{% endblock %}
+
+{% block content %}
+<div class="container mx-auto mt-10">
+    <h1 class="text-center text-3xl font-bold mb-6">Report This Item</h1>
+
+    <form method="post" class="max-w-md mx-auto" action="{% url 'items:report_item' item.id %}" id="reportForm">
+        {% csrf_token %}
+        <div class="mb-4">
+            <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-sm" id="reportBtn">
+                Report This Item
+            </button>
+        </div>
+    </form>
+
+    <p class="text-green-500 text-center mb-4" id="thankYouMessage" style="display: none;">Thank you for reporting this item!</p>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const reportForm = document.getElementById('reportForm');
+        const reportBtn = document.getElementById('reportBtn');
+        const thankYouMessage = document.getElementById('thankYouMessage');
+
+        reportForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            // Simulate form submission (you can remove this if you want to submit the form)
+            // ...
+
+            // Hide the form and show the thank you message
+            reportForm.style.display = 'none';
+            thankYouMessage.style.display = 'block';
+        });
+    });
+</script>
+{% endblock %}
