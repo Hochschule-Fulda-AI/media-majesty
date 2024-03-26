@@ -1,0 +1,196 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Search items{% endblock %}
+
+{% block content %}
+<div class="container mx-auto mt-8 px-4 md:px-0">
+    <form action="{% url 'items:index' %}" class="w-full mb-10 flex items-center" autocomplete="off">
+        <input type="text" name="search" id="searchInput" placeholder="Search"
+            class="py-4 px-6 border w-full rounded-l-md" value="{{ search }}">
+        <a id="voiceSearchBtn" href="#"
+            class="py-4 px-2 bg-green-500 hover:bg-green-600 rounded-r-md text-white font-medium">
+            <i class="fa fa-microphone"></i>
+        </a>
+    </form>
+
+    <div id="suggestionsContainer" class="w-full mb-4">
+        <ul id="suggestionsList" class="list-none p-2 bg-white shadow-md rounded-md"></ul>
+    </div>
+
+    <div class="pb-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div class="md:col-span-1 bg-gray-100 p-6 rounded-md">
+            <p class="font-semibold">Categories</p>
+            <ul class="mt-4">
+                {% for category in categories %}
+                <li class="mb-2 p-4 {% if category.id == category_id %} bg-gray-300 {% endif %}">
+                    <a href="{% url 'items:index' %}?search={{ search }}&category={{ category.id }}"
+                        class="text-gray-500 hover:text-gray-700">{{ category.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <p class="font-semibold">Filters</p>
+            <ul class="mt-4">
+                <li class="p-4">
+                    <label for="min_price" class="block text-gray-500 mb-2">Minimum Price:</label>
+                    <input type="number" name="min_price" id="min_price" placeholder="minimum price"
+                        class="py-2 px-4 w-full border rounded-md width" value="{{ request.GET.min_price }}">
+                </li>
+                <li class="p-4">
+                    <label for="max_price" class="block text-gray-500 mb-2">Maximum Price:</label>
+                    <input type="number" name="max_price" id="max_price" placeholder="maximum price"
+                        class="py-2 px-4 w-full border rounded-md width" value="{{ request.GET.max_price }}">
+                </li>
+                <li><button class="my-2 ml-4 py-2 px-4 bg-blue-500 hover:bg-blue-600 rounded-md text-white font-medium"
+                        id="apply-price">Apply
+                        Price</button>
+                </li>
+            </ul>
+            <div class="text-center mb-4">
+                <a href="{% url 'items:index' %}"
+                    class="mt-8 py-2 px-4 inline-block bg-yellow-500 hover:bg-yellow-600 rounded-md text-lg text-white font-medium">Clear
+                    Filters</a>
+            </div>
+        </div>
+
+        <div class="md:col-span-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                {% for item in items %}
+                <div>
+                    <a href="{% url 'items:item' item.id %}">
+                        <div>
+                            <img src="{{ item.thumbnail_url }}" class="rounded-t-xl" />
+                        </div>
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl">{{ item.name }}</h2>
+                            <h2 class="text-sm text-gray-600 mb-2">{{ item.category }}</h2>
+                            <p class="text-gray-500">Price: {{ item.price }}€</p>
+                        </div>
+                    </a>
+                </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        const searchInput = $("#searchInput");
+        const suggestionsContainer = $("#suggestionsContainer");
+        const minPrice = $("#min_price");
+        const maxPrice = $("#max_price");
+        const applyPrice = $("#apply-price");
+        const voiceSearchBtn = $("#voiceSearchBtn");
+
+        applyPrice.on("click", function () {
+            const minPriceValue = minPrice.val();
+            const maxPriceValue = maxPrice.val();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+
+            let newUrl = "{% url 'items:index' %}?";
+
+            if (categoryParam) {
+                newUrl += "category=" + categoryParam + "&";
+            }
+
+            newUrl += "min_price=" + minPriceValue + "&max_price=" + maxPriceValue;
+
+            window.location.href = newUrl;
+        });
+
+        suggestionsContainer.hide();
+
+        searchInput.on("input", function () {
+            const userInput = searchInput.val();
+
+            $.ajax({
+                url: "{% url 'items:search_suggestion' %}",
+                method: "GET",
+                data: {"query": userInput},
+                success: function (data) {
+                    updateSuggestions(data);
+                },
+                error: function (error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+
+        function updateSuggestions(suggestions) {
+            const suggestionsList = $("#suggestionsList");
+            suggestionsList.empty();
+
+            if (suggestions.length === 0) {
+                suggestionsList.append("<li class='py-2 px-4 text-gray-500'>No suggestions found</li>");
+            } else {
+                suggestions.forEach(function (suggestion) {
+                    suggestionsList.append("<li class='py-2 px-4 hover:bg-gray-100 cursor-pointer' data-item-id='" + suggestion.id + "'>" + suggestion.name + "</li>");
+                });
+            }
+
+            if (suggestions.length > 0) {
+                suggestionsContainer.show();
+            } else {
+                suggestionsContainer.hide();
+            }
+        }
+
+        $(document).on("click", "#suggestionsList li", function () {
+            const itemId = $(this).data("item-id");
+            window.location.href = "/items/" + itemId + "/";
+        });
+
+        searchInput.on("keyup", function () {
+            const userInput = searchInput.val();
+            if (userInput.trim() === "") {
+                suggestionsContainer.hide();
+            }
+        });
+
+        voiceSearchBtn.on("click", function () {
+            event.preventDefault();
+            voiceSearchBtn.addClass('text-red-500');
+
+            if ('SpeechRecognition' in window) {
+                const recognition = new window.SpeechRecognition();
+                recognition.lang = "en-US";
+                startRecognition(recognition);
+            } else if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = "en-US";
+                startRecognition(recognition);
+            } else if ('mozSpeechRecognition' in window) {
+                const recognition = new mozSpeechRecognition();
+                recognition.lang = "en-US";
+                startRecognition(recognition);
+            } else {
+                alert("Voice search is not supported in your browser. Please use the manual search instead.");
+            }
+        });
+
+        function startRecognition(recognition) {
+            recognition.onresult = function (event) {
+                const result = event.results[0][0].transcript;
+                searchInput.val(result);
+                searchInput.trigger("input");
+            };
+            recognition.onend = function () {
+                voiceSearchBtn.removeClass('text-red-500');
+            };
+            recognition.start();
+        }
+
+    });
+</script>
+
+{% endblock %}

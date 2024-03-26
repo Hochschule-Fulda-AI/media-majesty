@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+<div class="w-full md:w-1/2 my-6 p-6 mx-auto bg-gray-100 rounded-xl">
+    <h1 class="mb-8 text-3xl text-center">Log In</h1>
+
+    <form method="post" class="px-4 md:px-20 text-lg" action="." autocomplete="off">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            <label for="username" class="inline-block mb-2">Username</label><br>
+            {{ form.username }}
+        </div>
+        <div class="mb-4">
+            <label for="password" class="inline-block mb-2">Password</label><br>
+            {{ form.password }}
+        </div>
+        {% if form.errors or form.non_field_errors %}
+        <div class="mb-3 p-4 md:p-6 bg-red-100 rounded-xl">
+            {% for field in form %}
+            {{ field.errors }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <p class="text-center">
+            <button type="submit"
+                class="py-4 px-6 my-4 w-full md:w-auto text-lg font-semibold bg-teal-500 hover:bg-teal-700 rounded-sm text-white">Log
+                In</button>
+        </p>
+        <p class="text-center mt-4">
+            <a href="{% url 'core:forgot_password' %}" class="text-gray-500 hover:text-gray-700">Forgot Password?</a>
+        </p>
+    </form>
+</div>
+{% endblock %}

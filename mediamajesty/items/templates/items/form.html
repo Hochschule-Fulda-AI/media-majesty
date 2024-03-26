@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-6 text-3xl font-bold">{{ title }}</h1>
+
+<form method="post" class="w-full md:w-1/2 mx-auto text-xl" action="." enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="p-6 md:p-10 my-6 mx-auto bg-gray-100 rounded-xl">
+        <div class="mb-8">
+            <label for="category" class="inline-block mb-2">Category</label><br>
+            {{ form.category }}
+        </div>
+        <div class="mb-8">
+            <label for="name" class="inline-block mb-2">Name</label><br>
+            {{ form.name }}
+        </div>
+        <div class="mb-8">
+            <label for="description" class="inline-block mb-2">Description</label><br>
+            {{ form.description }}
+        </div>
+        <div class="mb-8">
+            <label for="media_file" class="inline-block mb-2">File to upload</label><br>
+            {{ form.media_file }}
+        </div>
+        <div class="mb-8">
+            <label for="price" class="inline-block mb-2">Price</label><br>
+            {{ form.price }}
+        </div>
+    </div>
+    {% if form.errors or form.non_field_errors %}
+    <div class="mt-6 mb-3 p-6 bg-red-100 rounded-xl">
+        {% for field in form %}
+        {{ field.errors }}
+        {% endfor %}
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+
+    <p class="text-center">
+        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold my-8 py-4 px-6 rounded-sm">
+            Submit
+        </button>
+    </p>
+</form>
+
+{% endblock %}

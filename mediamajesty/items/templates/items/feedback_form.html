@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Leave Feedback{% endblock %}
+
+{% block content %}
+
+<div class="container mx-auto mt-8">
+    <h2 class="text-2xl font-bold mb-6 text-center">Give us a review regarding your purchase {{ item.name }}</h2>
+
+    <form method="post" action="{% url 'items:feedback_form' item.id %}" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
+        {% csrf_token %}
+        
+        <div class="mb-6">
+            <label for="id_feedback" class="block text-lg font-medium text-gray-600 mb-2">Feedback</label>
+            <textarea id="id_feedback" name="feedback" class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500" rows="4" required></textarea>
+        </div>
+
+        <div class="mb-6">
+            <label for="id_rating" class="block text-lg font-medium text-gray-600 mb-2">Rating</label>
+            <input type="number" id="id_rating" name="rating" class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500" min="1" max="5" required>
+        </div>
+
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit Feedback</button>
+    </form>
+</div>
+    <script>
+        $('#feedbackForm').submit(function () {
+            window.location.href = "{% url 'items:thank_you' %}";
+            return false;
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

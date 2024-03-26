@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}{% endblock %} | Media Majesty</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <nav class="px-4 md:px-40 py-4 md:py-10 flex justify-between items-center border-b border-gray-200">
+        <a href="/" class="text-xl font-semibold">Media Majesty</a>
+        <div class="space-x-4 md:space-x-6">
+            <!-- Responsive dropdown menu -->
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd"
+                            d="M4.75 6a.75.75 0 0 1 1.5 0V7h11.5a.75.75 0 1 1 0 1.5H6.25v1.5h10.5a.75.75 0 1 1 0 1.5H6.25v1.5h9.5a.75.75 0 1 1 0 1.5H6.25v1.25a.75.75 0 1 1-1.5 0V6zM3 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z">
+                        </path>
+                    </svg>
+                </button>
+                <div id="menu"
+                    class="hidden md:hidden absolute bg-white right-0 mt-2 py-2 w-48 border rounded-md shadow-lg">
+                    {% if request.user.is_authenticated %}
+                    {% if request.user.is_superuser %}
+                    <a href="{% url 'items:pending_items' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pending Items</a>
+                    <a href="{% url 'seed:categories' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Seed Categories</a>
+                    <a href="{% url 'seed:users' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Seed Users</a>
+                    <a href="{% url 'seed:items' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Seed Items</a>
+                    {% else %}
+                    <a href="{% url 'items:add' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Add
+                        Item</a>
+                    <a href="{% url 'dashboard:index' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                    {% endif %}
+                    <a href="{% url 'items:index' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Search Item</a>
+                    <a href="{% url 'chats:index' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Inbox</a>
+                    <a href="{% url 'core:logout' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                    {% else %}
+                    <a href="{% url 'core:contact' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Contact</a>
+                    <a href="{% url 'core:about' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About</a>
+                    <a href="{% url 'items:index' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Search Item</a>
+                    <a href="{% url 'core:signup' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign up</a>
+                    <a href="{% url 'core:login' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log
+                        in</a>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- End of responsive dropdown menu -->
+
+            <!-- Normal menu for larger screens -->
+            <div class="hidden md:flex items-center space-x-6">
+                {% if request.user.is_authenticated %}
+                {% if request.user.is_superuser %}
+                <a href="{% url 'items:pending_items' %}" class="text-sm font-medium hover:text-gray-500">Pending
+                    Items</a>
+                <a href="{% url 'seed:categories' %}" class="text-sm font-medium hover:text-gray-500">Seed
+                    Categories</a>
+                <a href="{% url 'seed:users' %}" class="text-sm font-medium hover:text-gray-500">Seed Users</a>
+                <a href="{% url 'seed:items' %}" class="text-sm font-medium hover:text-gray-500">Seed Items</a>
+                {% else %}
+                <a href="{% url 'items:add' %}" class="text-sm font-medium hover:text-gray-500">Add Item</a>
+                <a href="{% url 'dashboard:index' %}" class="text-sm font-medium hover:text-gray-500">Dashboard</a>
+                {% endif %}
+                <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
+                <a href="{% url 'chats:index' %}" class="text-sm font-medium hover:text-gray-500">Inbox</a>
+                <a href="{% url 'core:logout' %}"
+                    class="text-sm px-6 py-3 font-medium bg-red-500 text-white hover:bg-red-700 rounded-sm">Logout</a>
+                {% else %}
+                <a href="{% url 'core:contact' %}" class="text-sm font-medium hover:text-gray-500">Contact</a>
+                <a href="{% url 'core:about' %}" class="text-sm font-medium hover:text-gray-500">About</a>
+                <a href="{% url 'items:index' %}" class="text-sm font-medium hover:text-gray-500">Search Item</a>
+                <a href="{% url 'core:signup' %}"
+                    class="text-sm px-6 py-3 font-medium bg-teal-500 text-white hover:bg-teal-700 rounded-sm">Sign
+                    up</a>
+                <a href="{% url 'core:login' %}"
+                    class="text-sm px-6 py-3 font-medium bg-gray-500 text-white hover:bg-gray-700 rounded-sm">Log
+                    in</a>
+                {% endif %}
+            </div>
+            <!-- End of normal menu for larger screens -->
+        </div>
+    </nav>
+    <div class="px-4 md:px-40 py-6 min-h-[80vh]">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="px-4 md:px-40 py-10 flex justify-between bg-gray-800">
+        <div class="w-2/3 pr-10 text-gray-500">
+            <disclaimer class="italic">
+                Fulda University of Applied Sciences, <br>
+                Software Engineering Project, Fall 2023, For Demonstration Purposes Only
+            </disclaimer>
+        </div>
+        <div class="w-1/3 flex justify-between">
+            <ul class="space-y-2">
+                <li>
+                    <a href="{% url 'core:about' %}" class="text-gray-500 hover:text-gray-300">About</a>
+                </li>
+                <li>
+                    <a href="{% url 'core:contact' %}" class="text-gray-500 hover:text-gray-300">Contact</a>
+                </li>
+            </ul>
+            <ul class="space-y-2">
+                <li>
+                    <a href="#" class="text-gray-500 hover:text-gray-300">Privacy Policy</a>
+                </li>
+                <li>
+                    <a href="#" class="text-gray-500 hover:text-gray-300">Terms of Service</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('menu-toggle').addEventListener('click', function () {
+            document.getElementById('menu').classList.toggle('hidden');
+        });
+    </script>
+
+    {% block scripts %}
+    {% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Chat {{ partner }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 md:px-0">
+
+    <div class="w-full lg:w-2/4 mx-auto mt-6 p-4 bg-gray-100 rounded-xl overflow-y-auto" style="max-height: 400px;">
+        <div class="chat-messages space-y-3" id="chat-messages">
+            {% if messages %}
+            {% for m in messages %}
+            <div class="{% if m.sender == request.user %} text-right {% else %} text-left {% endif %}">
+                <div class="inline-block rounded-lg p-2 {% if m.sender == request.user %} bg-blue-500 text-white {% else %} bg-gray-300 {% endif %}">
+                    <p><b>{{ m.sender }}</b>: {{ m.content }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-center" id="no-message-box">No messages sent to {{ partner }} yet...</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="w-full lg:w-2/4 mx-auto mt-6 p-4 bg-white rounded-xl">
+        <form method="post" action="." class="flex" autocomplete="off">
+            {% csrf_token %}
+            <input type="text" name="content" class="flex-1 mr-3 p-4 border rounded-md" placeholder="Your message..."
+                id="chat-message-input">
+            <button id="chat-message-submit" type="submit"
+                class="px-5 py-3 rounded-md text-white bg-teal-600 hover:bg-teal-700">Send</button>
+        </form>
+        {{ conversation.id|json_script:"roomname" }}
+        {{ user.username|json_script:"username" }}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const chatMessageSubmit = document.getElementById('chat-message-submit');
+    const chatMessageInput = document.getElementById('chat-message-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const roomName = JSON.parse(document.getElementById('roomname').textContent);
+    const userName = JSON.parse(document.getElementById('username').textContent);
+    chatMessageInput.focus();
+
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/'
+        + roomName
+        + '/'
+    );
+
+    chatSocket.onmessage = (e) => {
+        if (document.getElementById('no-message-box')) {
+            document.getElementById('no-message-box').remove();
+        }
+        const data = JSON.parse(e.data);
+        const messageElement = document.createElement('div');
+        messageElement.className = data.sender === userName ? 'text-right' : 'text-left';
+        const bubbleColor = data.sender === userName ? 'bg-blue-500 text-white' : 'bg-gray-300';
+        messageElement.innerHTML = '<div class="inline-block rounded-lg p-2 ' + bubbleColor + '"><p><b>' + data['sender'] + '</b>: ' + data['message'] + '</p></div>';
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the bottom
+    }
+
+    chatSocket.onclose = (e) => {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    chatMessageSubmit.onclick = (e) => {
+        e.preventDefault();
+        const message = chatMessageInput.value;
+        chatSocket.send(JSON.stringify({
+            'room': roomName,
+            'sender': userName,
+            'message': message,
+        }));
+        chatMessageInput.value = '';
+    }
+</script>
+{% endblock %}
