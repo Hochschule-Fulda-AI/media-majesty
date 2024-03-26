@@ -8,6 +8,7 @@ from django.urls import reverse
 from .file_handler import delete_file, upload_file
 from .forms import FeedbackForm, ItemForm
 from .models import Category, Item, ItemFeedback, ItemReport
+from .thumbnail_generator import generate_thumbnail
 
 
 def index(request):
@@ -77,8 +78,8 @@ def add(request):
             item = form.save(commit=False)
             item.created_by = request.user
             media_file = request.FILES["media_file"]
-            blob_name = asyncio.run(upload_file(media_file))
-            item.media_blob_name = blob_name
+            item.media_blob_name = asyncio.run(upload_file(media_file))
+            item.thumbnail_url = generate_thumbnail(media_file)
             item.save()
             return redirect("items:item", id=item.id)
 

@@ -24,7 +24,7 @@ class Item(models.Model):
     description = models.TextField(blank=True)
     price = models.FloatField()
     media_blob_name = models.CharField(max_length=255)
-    thumbnail_url = models.URLField(blank=True, null=True)
+    thumbnail_url = models.URLField()
     is_approved = models.BooleanField(default=False)
     is_sold = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
