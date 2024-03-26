@@ -1,10 +1,10 @@
-SEED_NUM = 10
+SEED_NUM = 5
 
 CATEGORIES = {
-    "Digital Illustrations",
-    "Photographs & Videos",
-    "Ebooks, Documents & Journals",
+    "Digital Illustrations & Photographs",
+    "Videos & Animations",
     "Music & Audio",
+    "Documents & Journals & Books",
 }
 
 # for validator in Items validators
@@ -13,15 +13,15 @@ ACCEPTED_FILE_EXTENSIONS = [
     "jpeg",
     "png",
     "mp4",
-    "mov",
-    "avi",
+    "mkv",
+    "webm",
     "mp3",
     "wav",
     "ogg",
     "flac",
+    "opus",
     "pdf",
     "doc",
-    "docx",
     "txt",
 ]
 
@@ -29,12 +29,14 @@ ACCEPTED_FILE_MIME_TYPES = [
     "image/jpeg",
     "image/png",
     "video/mp4",
-    "video/quicktime",
-    "video/x-msvideo",
+    "video/x-matroska",
+    "video/webm",
+    "audio/webm",
     "audio/mpeg",
     "audio/wav",
     "audio/ogg",
     "audio/flac",
+    "audio/opus",
     "application/pdf",
     "application/msword",
     "text/plain",
