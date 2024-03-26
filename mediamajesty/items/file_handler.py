@@ -5,8 +5,8 @@ from azure.storage.blob.aio import BlobServiceClient
 from django.core.files import File
 
 connection_string = os.getenv("AZURE_CONNECTION_STRING", "")
-media_container_name = os.getenv("AZURE_MEDIA_CONTAINER", "")
-thumbnail_container_name = os.getenv("AZURE_THUMBNAIL_CONTAINER", "")
+media_container = os.getenv("AZURE_MEDIA_CONTAINER", "")
+thumbnail_container = os.getenv("AZURE_THUMBNAIL_CONTAINER", "")
 
 
 class MediaBlob:
@@ -43,14 +43,14 @@ class MediaBlob:
         return True
 
 
-async def upload_file(file):
+async def upload_file(file, container=media_container):
     try:
         media = MediaBlob()
         async with BlobServiceClient.from_connection_string(
             connection_string
         ) as blob_service_client:
             blob_name = await media.upload_file_as_blob(
-                blob_service_client, media_container_name, file
+                blob_service_client, container, file
             )
         return blob_name
     except Exception as e:
@@ -64,21 +64,21 @@ async def download_file(blob_name):
             connection_string
         ) as blob_service_client:
             blob = await media.download_blob(
-                blob_service_client, media_container_name, blob_name
+                blob_service_client, media_container, blob_name
             )
         return blob
     except Exception as e:
         print(e)
 
 
-async def delete_file(blob_name):
+async def delete_file(blob_name, container=media_container):
     try:
         media = MediaBlob()
         async with BlobServiceClient.from_connection_string(
             connection_string
         ) as blob_service_client:
             is_deleted = await media.delete_blob(
-                blob_service_client, media_container_name, blob_name
+                blob_service_client, container, blob_name
             )
         return is_deleted
     except Exception as e:
@@ -102,7 +102,7 @@ async def upload_default_thumbnails():
                     thumbnail_file = File(f)
                     await media.upload_file_as_blob(
                         blob_service_client,
-                        thumbnail_container_name,
+                        thumbnail_container,
                         thumbnail_file,
                         blob_name="defaults/" + thumbnail.split("/")[-1],
                     )

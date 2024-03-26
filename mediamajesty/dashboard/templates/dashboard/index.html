@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 md:px-0">
     <div class="mt-6 py-12 bg-gray-100 rounded-sm">
         <h2 class="mb-6 text-2xl text-center">My Items</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
+        <div class="grid grid-cols-1 md:px-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
             {% for item in items %}
             <div class="bg-white rounded-xl shadow-md">
                 <a href="{% url 'items:item' item.id %}">

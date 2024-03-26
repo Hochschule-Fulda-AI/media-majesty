@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg, Q
@@ -78,8 +79,9 @@ def add(request):
             item = form.save(commit=False)
             item.created_by = request.user
             media_file = request.FILES["media_file"]
-            item.media_blob_name = asyncio.run(upload_file(media_file))
-            item.thumbnail_url = generate_thumbnail(media_file)
+            blob_name = asyncio.run(upload_file(media_file))
+            item.media_blob_name = blob_name
+            item.thumbnail_url = generate_thumbnail(media_file, blob_name)
             item.save()
             return redirect("items:item", id=item.id)
 
@@ -108,8 +110,16 @@ def edit(request, id):
             if request.FILES["media_file"]:
                 media_file = request.FILES["media_file"]
                 asyncio.run(delete_file(form.instance.media_blob_name))
+                thumbnail_blob_name = (
+                    "uploads/" + form.instance.thumbnail_url.split("/")[-1]
+                )
+                thumbnail_container = os.getenv("AZURE_THUMBNAIL_CONTAINER", "")
+                asyncio.run(
+                    delete_file(thumbnail_blob_name, container=thumbnail_container)
+                )
                 blob_name = asyncio.run(upload_file(media_file))
                 form.instance.media_blob_name = blob_name
+                item.thumbnail_url = generate_thumbnail(media_file, blob_name)
             form.save()
             return redirect("items:item", id=id)
     else:
@@ -129,6 +139,9 @@ def edit(request, id):
 def delete(request, id):
     item = get_object_or_404(Item, id=id, created_by=request.user)
     asyncio.run(delete_file(item.media_blob_name))
+    thumbnail_blob_name = "uploads/" + item.thumbnail_url.split("/")[-1]
+    thumbnail_container = os.getenv("AZURE_THUMBNAIL_CONTAINER", "")
+    asyncio.run(delete_file(thumbnail_blob_name, container=thumbnail_container))
     item.delete()
     return redirect("dashboard:index")
 
