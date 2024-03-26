@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from faker import Faker
-from items.file_handler import upload_file
+from items.file_handler import upload_default_thumbnails, upload_file
 from items.models import Category, Item
 from utils.constants import CATEGORIES, SEED_NUM
 from utils.functions import download_image_from_url
@@ -16,6 +16,7 @@ fake = Faker()
 @user_passes_test(lambda u: u.is_staff)  # type: ignore
 def categories(_):
     created_categories = []
+    asyncio.run(upload_default_thumbnails())
     for name in CATEGORIES:
         _, created = Category.objects.get_or_create(name=name)
         created_categories.append({"name": name, "created": created})
