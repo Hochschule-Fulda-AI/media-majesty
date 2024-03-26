@@ -40,6 +40,14 @@ You need to have these things set up
 - `ssh` key set up with github
 - `poetry` installed, check the [documentation](https://python-poetry.org/docs/)
 
+Optionally, it would be nice if you have
+- `make`build tool, makes our life easier. check [documentation](https://www.gnu.org/software/make/#download)
+
+```sh
+# On mac, you can install it with brew if you don't have it already
+
+brew install make
+```
 
 ### Steps to reproduce
 
@@ -70,6 +78,9 @@ You need to have these things set up
 
     ```bash
     poetry install # installs all the dependencies into the virtual environment
+
+    # or alternatively, if you have make
+    make install
     ```
 
     ##### Activating virtual environment
@@ -116,10 +127,18 @@ You need to have these things set up
     cd mediamajesty
 
     # run the SQL migrations
+    python manage.py makemigrations
     python manage.py migrate
+
+    # or alternatively,
+    make migrations
+    make migrate
 
     # run the development server
     python manage.py runserver
+
+    # or alternatively,
+    make run
     ```
 
 
@@ -130,6 +149,15 @@ You need to have these things set up
 > These `manage.py` commands will only work if you are inside poetry's virtual
 > environment which you should have activated from the previous step hopefully.
 
+> **Pro Tip**:
+> You can check out the Makefile and try other commands
+
+```bash
+# For eg, make start will install the dependencies, run migrations and run
+# the development server automatically
+
+make start
+```
 
 6. One final note, install pre-commit:
 
