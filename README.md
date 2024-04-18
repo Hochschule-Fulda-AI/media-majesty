@@ -1,6 +1,17 @@
 # media-majesty
 A digital media marketplace
 
+## Screenshots
+
+> A few screenshots of what the application looks like
+
+![Home Page](scrots/scrot1.jpg "Home Page")
+![Search Page](scrots/scrot2.jpg "Search Page")
+![Item Page](scrots/scrot3.jpg "Item Page")
+
+> Responsiveness on the phone
+
+![Responsiveness](scrots/scrot4.jpg "Responsiveness")
 
 ## Project Contributors
 
